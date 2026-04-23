@@ -7,6 +7,8 @@ use App\Http\Controllers\GoogleAuthController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Configuration\VehicleController;
+use App\Http\Controllers\Configuration\UserController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -29,6 +31,17 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    //vehicle
+    Route::get('/car', [VehicleController::class, 'carIndex'])->name('vehicle.index');
+    Route::post('/car', [VehicleController::class, 'saveVehicle'])->name('vehicle.save');
+    Route::post('/car/edit', [VehicleController::class, 'editVehicle'])->name('vehicle.edit');
+    Route::post('/car/delete', [VehicleController::class, 'deleteVehicle'])->name('vehicle.delete');
+
+    //user
+    Route::get('/user', [UserController::class, 'index'])->name('user.index');
+    Route::post('/user/edit', [UserController::class, 'editUser'])->name('user.edit');
+    Route::post('/user/authorised', [UserController::class, 'changeAuthorisation'])->name('user.authorise');
+    
     //event
     Route::post('/events', [EventController::class, 'saveNewEvent'])->name('event.saveNewEvent');
     Route::post('/events/delete', [EventController::class, 'deleteEvent'])->name('event.deleteEvent');

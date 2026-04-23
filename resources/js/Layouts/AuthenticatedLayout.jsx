@@ -31,10 +31,16 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Home
                                 </NavLink>
                                 <NavLink
-                                    href={route('profile.edit')}
-                                    active={route().current('profile.edit')}
+                                    href={route('vehicle.index')}
+                                    active={route().current('vehicle.index')}
                                 >
-                                    Profile
+                                    Vehicle
+                                </NavLink>
+                                <NavLink
+                                    href={route('user.index')}
+                                    active={route().current('user.index')}
+                                >
+                                    User
                                 </NavLink>
                             </div>
                             
@@ -157,6 +163,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             <ResponsiveNavLink href={route('profile.edit')}>
                                 Profile
                             </ResponsiveNavLink>
+                            
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}
