@@ -3,7 +3,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import FileInput from '@/Components/FileInput';
 import { useRef, useState, useEffect} from 'react';
 import {
@@ -34,27 +34,24 @@ export default function UserAuthorisedUser({user}) {
 
     const { data, setData, errors, post,  put, reset, processing, recentlySuccessful,
     } = useForm({ 
-        id: user.id,
-        current_is_authorised: user.is_authorised,
+        id: user.id || '',
+        current_is_authorised: user.is_authorised || '',
     });
-    console.log(data)
 
     useEffect(()=>{
         setData({
             id: user.id,
             current_is_authorised: user.is_authorised,
         });
-    },user,setData)
+    },[user, setData])
+    console.log(data);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-
     const handleDialogClose = (isOpen) => {
         setIsDialogOpen(isOpen);
-
         if (!isOpen) {
             reset(
-                data,
                 'id',
                 'current_is_authorised',
             );
@@ -64,25 +61,13 @@ export default function UserAuthorisedUser({user}) {
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route('user.authorise'), {
             onSuccess: () => {
-                setData('id', '')
-                setData('current_is_authorised', '')
-                reset(
-                    data,
-                    'id',
-                    'current_is_authorised',
-                )
+                router.reload({only:['user']})
                 setIsDialogOpen(false);
-
             }
         })
 
-    };
-
-    const handleEntityChange = (entity) => {
-        setData('entity', entity);
     };
 
     return (

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('actual_name')->nullable();
             $table->string('entity')->nullable();
             $table->string('designation')->nullable();
+            $table->integer('is_admin')->default(0);
+            $table->integer('is_approver')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

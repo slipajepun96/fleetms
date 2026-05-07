@@ -19,7 +19,7 @@ class VehicleController extends Controller
     {
         // dd('test');
         $vehicles = vehicle::all();
-        return Inertia::render('Car/Vehicle', [
+        return Inertia::render('Configuration/Car/Vehicle', [
            'vehicles' => $vehicles,
         ]);
     }

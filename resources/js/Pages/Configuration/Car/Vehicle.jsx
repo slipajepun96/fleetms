@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import ConfigurationLayout from '@/Layouts/ConfigurationLayout';
 import { Head } from '@inertiajs/react';
 import VehicleDeleteVehicle from './Partials/VehicleDeleteVehicle';
 import VehicleAddVehicle from './Partials/VehicleAddVehicle';
@@ -9,7 +9,7 @@ import VehicleEditVehicle from './Partials/VehicleEditVehicle';
 export default function Vehicle({ mustVerifyEmail, status, vehicles }) {
 
     return (
-        <AuthenticatedLayout
+        <ConfigurationLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
                     Vehicle
@@ -19,7 +19,7 @@ export default function Vehicle({ mustVerifyEmail, status, vehicles }) {
             <Head title="Profile" />
 
             <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                <div className="p-2 mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="bg-white p-2 md:p-4 shadow sm:rounded-lg sm:p-8">
                         <VehicleAddVehicle className="max-w-xl" />
                     </div>
@@ -44,6 +44,6 @@ export default function Vehicle({ mustVerifyEmail, status, vehicles }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </ConfigurationLayout>
     );
 }

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Configuration\VehicleController;
 use App\Http\Controllers\Configuration\UserController;
+use App\Http\Controllers\Configuration\ConfigurationController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -31,6 +32,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    //request car
+    Route::post('/home', [HomeController::class, 'requestVehicle'])->name('vehicle.request');
+    Route::post('/home/delete', [HomeController::class, 'deleteRequestedVehicle'])->name('vehicle.deleteRequested');
+    Route::get('/home/approve/{id}', [HomeController::class, 'approveRequestVehicle'])->name('vehicle.approve');
+    Route::get('/home/reject/{id}', [HomeController::class, 'rejectRequestVehicle'])->name('vehicle.reject');
+    Route::post('/home/start-use', [HomeController::class, 'startUseVehicle'])->name('vehicle.startUse');
+
     //vehicle
     Route::get('/car', [VehicleController::class, 'carIndex'])->name('vehicle.index');
     Route::post('/car', [VehicleController::class, 'saveVehicle'])->name('vehicle.save');
@@ -41,6 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::post('/user/edit', [UserController::class, 'editUser'])->name('user.edit');
     Route::post('/user/authorised', [UserController::class, 'changeAuthorisation'])->name('user.authorise');
+    Route::post('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
+
+    //configuration
+    Route::get('/configuration', [ConfigurationController::class, 'configurationIndex'])->name('configuration.index');
     
     //event
     Route::post('/events', [EventController::class, 'saveNewEvent'])->name('event.saveNewEvent');

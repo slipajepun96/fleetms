@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('vehicle_manufacturer');
             $table->string('vehicle_model');
             $table->string('insurance_expiry');
-            $table->string('roadtax_expiry');
-            
+            $table->string('roadtax_expiry');    
             $table->string('vehicle_type');
             $table->string('designated_person')->nullable();
             $table->string('owner_entity');
-
+            $table->boolean('is_active')->default(1);
+            $table->string('current_odometer')->nullable();
         });
     }
 

@@ -148,6 +148,7 @@ export default function VehicleAddVehicle() {
                                     value={data.vehicle_manufacturer}
                                     className="mt-1 block w-full"
                                     isFocused={true}
+                                    autoComplete={false}
                                     onChange={(e) =>
                                         setData('vehicle_manufacturer', e.target.value)
                                     }

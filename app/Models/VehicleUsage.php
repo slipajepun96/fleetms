@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
-class Vehicle extends Authenticatable
+class VehicleUsage extends Authenticatable
 {
     use HasFactory, Notifiable;
     
@@ -30,15 +30,23 @@ class Vehicle extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'plateNum',
-        'vehicle_manufacturer',
-        'vehicle_model',
-        'insurance_expiry',
-        'roadtax_expiry',  
-        'vehicle_type',
-        'designated_person',
-        'owner_entity',
-        'is_active',
-        'current_odometer',
+        'user_uuid',
+        'vehicle_uuid',
+        'start_date',
+        'end_date',
+        'actual_start_datetime',
+        'actual_end_datetime',
+        'destination',
+        'purpose',
+        'status',
+        'application_status',
+        'approver_uuid',
+        'approver_status_datetime',
+        'start_odometer',
+        'end_odometer',
+        'fuel_purchase',
+        'notes_on_return',
+        'return_datetime',
+        'return_user_uuid',
     ];
 }

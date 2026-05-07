@@ -1,10 +1,10 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import ConfigurationLayout from '@/Layouts/ConfigurationLayout';
 import { Head } from '@inertiajs/react';
-import VehicleDeleteVehicle from './Partials/VehicleDeleteVehicle';
-import UserAuthorisedUser from './Partials/UserAuthorisedUser';
 import DataTable from '@/Components/DataTable';
 import PrimaryButton from '@/Components/PrimaryButton';
 import UserEditUser from './Partials/UserEditUser';
+import UserDeleteUser from './Partials/UserDeleteUser';
+import UserAuthorisedUser from './Partials/UserAuthorisedUser';
 
 export default function User({ users, user}) {
     console.log(users);
@@ -65,30 +65,31 @@ export default function User({ users, user}) {
                 <div className="flex space-x-2 gap-2">
                     <UserAuthorisedUser user={row}/>
                     <UserEditUser user={row}/>
+                    <UserDeleteUser user={row}/>
                 </div>
             )
         },
     ];
 
     return (
-        <AuthenticatedLayout
+        <ConfigurationLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Vehicle
+                    User 
                 </h2>
             }
         >
             <Head title="Profile" />
 
             <div className="py-2">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="p-4 text-gray-900 border border-gray-300 rounded-lg shadow">
-                        <div className="p-6 text-gray-900">
+                <div className="md:mx-auto md:max-w-7xl lg:px-8">
+                    <div className="m-2 p-4 text-gray-900 border border-gray-300 rounded-lg shadow">
+                        <div className="text-gray-900">
                             <DataTable columns={columns} data={users} className='mt-4'/>
                         </div>
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </ConfigurationLayout>
     );
 }

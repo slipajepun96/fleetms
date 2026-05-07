@@ -3,7 +3,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import FileInput from '@/Components/FileInput';
 import { useRef, useState } from 'react';
 import {
@@ -40,6 +40,7 @@ export default function UserEditUser({user}) {
         email: user.email || '-',
         entity: user.entity || '-',
         designation: user.designation || '-',
+        is_approver: user.is_approver || '-',
     });
     // console.log('id'+data.id)
 
@@ -56,6 +57,7 @@ export default function UserEditUser({user}) {
                 'email',
                 'entity',
                 'designation',
+                'is_approver',
             );
         }
     };
@@ -66,14 +68,7 @@ export default function UserEditUser({user}) {
 
         post(route('user.edit'), {
             onSuccess: () => {
-                reset(
-                    'id',
-                    'name',
-                    'actual_name',
-                    'email',
-                    'entity',
-                    'designation',
-                )
+                router.reload({only:['user']})
                 setIsDialogOpen(false);
             }
         })
@@ -81,6 +76,10 @@ export default function UserEditUser({user}) {
 
     const handleEntityChange = (entity) => {
         setData('entity', entity);
+    };
+
+    const handleIsApproverChange = (isApprover) => {
+        setData('is_approver', isApprover);
     };
 
     return (
@@ -101,7 +100,7 @@ export default function UserEditUser({user}) {
                                 <InputLabel
                                     value={
                                         <>
-                                            Name <span className="text-red-500">*</span>
+                                            Name 
                                         </>
                                     }
                                 />
@@ -213,6 +212,31 @@ export default function UserEditUser({user}) {
                                 />
                                 <InputError
                                     message={errors.designation}
+                                    className="mt-2"
+                                />
+                            </div>
+
+                            <div>
+                                <InputLabel
+                                    value={
+                                        <>
+                                            Set as Approver<span className="text-red-500">*</span>
+                                        </>
+                                    }
+                                />
+                                <RadioGroup
+                                    name="is_approver"
+                                    value={data.is_approver}
+                                    onChange={handleIsApproverChange}
+                                    options={[
+                                        { value: '0', label: 'No' },
+                                        { value: '1', label: 'Yes' },
+                                    ]}
+                                    columns={2}
+                                    required
+                                />
+                                <InputError
+                                    message={errors.is_approver}
                                     className="mt-2"
                                 />
                             </div>

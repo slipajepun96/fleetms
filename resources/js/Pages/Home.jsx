@@ -31,21 +31,20 @@ import ViewEventDetails from './Partials/ViewEventDetails';
 import ViewQRLinkShare from './Partials/ViewQRLinkShare';
 import ViewAttendanceList from './Partials/ViewAttendanceList';
 import DeleteEvent from './Partials/DeleteEvent';
+import RequestVehicle from './Partials/RequestVehicle';
+import ViewRequestVehicle from './Partials/ViewRequestVehicle';
+import RequestApproval from './Partials/RequestApproval';
+import StartUse from './Partials/StartUse';
 
-
-export default function Home({events}) {
+export default function Home({events, vehicles, vehicle, vehicle_usages, approver_status, users, vehicle_requests_pending, requests_approved}) {
     const [showForm, setShowForm] = useState(false);
     const [openEventDate, setOpenEventDate] = useState(false);
     const [shouldSubmit, setShouldSubmit] = useState(false);
-
-      const { flash } = usePage().props;
+    const { flash } = usePage().props;
 
     const dateFormat = (date) => {
         return format(date, 'dd MMM yyyy');
     }
-
-
-
 
     const displayEventForm = (type) => {
         // reset();
@@ -56,45 +55,66 @@ export default function Home({events}) {
         setShowForm(false);
     };
 
+    const getVehiclePlateNumber = (vehicle_uuid) => {
+        const vehicle = vehicles.find(v => v.id === vehicle_uuid);
+        return vehicle ? vehicle.plateNum : 'Unknown Vehicle';
+    }
+
+    console.log(vehicle_usages);
+
     return (
         <AuthenticatedLayout>
             <Head title="Home" />
 
             <div className="py-6 px-2">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-gradient-to-bl from-black  to-slate-500 shadow-sm sm:rounded-lg">
+                    {/* <div className="overflow-hidden bg-gradient-to-bl from-black  to-slate-500 shadow-sm sm:rounded-lg">
                         <div className="p-6 text-white">
                             Make Your Attendance Easy with <b>attend</b>!
                         </div>
+                    </div> */}
+                    <div className="grid flex-1 gap-2 md:grid-cols-6 my-2">
+                        <div>
+                            <RequestVehicle vehicles={vehicles}/>
+                        </div>
+                        <div>
+                            <StartUse vehicle_usages={vehicle_usages} vehicles={vehicles} requests_approved={requests_approved} vehicle={vehicle} />
+                        </div>
                     </div>
 
-                    
-                    <div className="mt-4 overflow-hidden ">
-                        {!showForm ? (
-                            <div className="sm:rounded-lg grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                <div className='bg-slate-900 text-white rounded-xl p-3 font-bold inline-flex items-center gap-2 hover:bg-slate-700'  onClick={() => displayEventForm(true)}>
-                                    <CirclePlus /> Make new event
+                    {approver_status === 1 && (
+                        <div className="p-2 md:p-2 text-gray-900 border-t-2 border-gray-700">
+                            <div className='font-bold'>
+                                Request for Approval
+                            </div>
+                            <div>
+                                <div className="grid flex-1 gap-2 md:grid-cols-3 my-2">
+                                {vehicle_requests_pending.map((vehicle_request_pending) => (
+                                    <RequestApproval vehicle_usage={vehicle_request_pending} vehicles={vehicles} users={users}/>
+                                ))}{vehicle_requests_pending.length === 0 && (
+                                    <div>Nothing to approve</div>
+                                )}
                                 </div>
                             </div>
-                        ) : (
-                            <div className='flex flex-row items-center gap-4 mb-4'>
-                                <PrimaryButton onClick={() => displayEventForm(false)}><ArrowLeft />Back</PrimaryButton><h1 className='font-bold text-2xl'>Create New Event</h1>
-                            </div>
-                            
-                        ) }
-                        {/* <div className='bg-slate-900 text-white rounded-xl p-3 font-bold inline-flex items-center gap-2 hover:bg-slate-700'>
-                           <CirclePlus /> Make new form
-                        </div> */}
+                        </div>
+                    )}
+                    
+                    <div className="p-2 md:p-2 text-gray-900 border-t-2 border-gray-700">
+                        <div className="font-bold">
+                            My Request
+                        </div>
+                        <div className="grid flex-1 gap-2 md:grid-cols-3 my-2">
+                            {vehicle_usages.map((vehicle_usage) => (
+                                <ViewRequestVehicle vehicle_usage={vehicle_usage} vehicles={vehicles}/>
+                            ))}
+                        </div>
                     </div>
-
+                    
                     {flash?.success && (
                         <div className='bg-green-200 p-2 my-2 rounded-lg'>
                             {flash.success}
                         </div>
                     )}
-
-
-
                 </div>
             </div>
         </AuthenticatedLayout>

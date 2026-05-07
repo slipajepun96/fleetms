@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         // dd('test');
         $users = User::all();
-        return Inertia::render('User/User', [
+        return Inertia::render('Configuration/User/User', [
             'users' => $users,
         ]);
     }
@@ -34,6 +34,7 @@ class UserController extends Controller
             'email' => 'required|string|max:255',
             'entity' => 'nullable|string|max:255',
             'designation' => 'nullable|string|max:255',
+            'is_approver' => 'nullable|integer',
         ]);
         // dd($validated);
 
@@ -43,11 +44,13 @@ class UserController extends Controller
         $users->email = $validated['email'];
         $users->entity = $validated['entity'];
         $users->designation = $validated['designation'];
+        $users->is_approver = $validated['is_approver'];
         $users->save();
         
         // dd($vehicle);
 
-        return Redirect:: route('user.index');
+        // return Redirect:: route('user.index');
+        return back()->with('success', 'User edit successfully.');
     }
 
     public function changeAuthorisation(Request $request): RedirectResponse 
@@ -64,6 +67,15 @@ class UserController extends Controller
             }
         $user->save();
 
-        return Redirect:: route('user.index');
+        // return Redirect::route('user.index');
+        return back()->with('success', 'User authorised status updated successfully.');
+    }
+
+    public function deleteUser(Request $requestd): RedirectResponse
+    {
+        // dd($requestd->id);
+        User::findOrFail($requestd->id)->delete();
+        
+        return Redirect::route('user.index')->with('success', 'User deleted successfully.');         
     }
 }

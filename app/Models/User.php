@@ -37,6 +37,8 @@ class User extends Authenticatable
         'actual_name',
         'entity',
         'designation',
+        'is_admin',
+        'is_approver',
     ];
 
     /**

@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
 
-export default function VehicleDeleteVehicle({ vehicleId }) {
+export default function DeleteRequestVehicle({ vehicleId }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
     const passwordInput = useRef();
 
@@ -38,7 +38,7 @@ export default function VehicleDeleteVehicle({ vehicleId }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('vehicle.delete'), {
+        post(route('vehicle.deleteRequested'), {
             id: vehicleId,
             ondelete: () => {
                 reset(
@@ -65,12 +65,12 @@ export default function VehicleDeleteVehicle({ vehicleId }) {
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
             <DialogTrigger asChild>
                 <PrimaryButton variant="outline">
-                    Delete
+                    Delete Requested Vehicle
                 </PrimaryButton>
             </DialogTrigger>
             <DialogContent className="max-w-xl">
                 <DialogHeader>
-                    <DialogTitle>Delete Vehicle</DialogTitle>
+                    <DialogTitle>Delete Requested Vehicle</DialogTitle>
                 </DialogHeader>
                 <div className="mt-4">
                     <form onSubmit={submit}>
