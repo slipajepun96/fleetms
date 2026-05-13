@@ -26,6 +26,7 @@ import RadioGroup from '@/Components/RadioGroup';
 import DeleteRequestVehicle from './DeleteRequestVehicle';
 import { useMediaQuery } from '@custom-react-hooks/use-media-query';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose, DrawerTrigger, } from "@/components/ui/drawer"
+import { ArrowRight, ArrowDown } from 'lucide-react';
 
 export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehicles}) {
     
@@ -44,6 +45,8 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
         purpose: '',
         start_date: '',
         end_date: '',
+        start_odometer: vehicle_usage.start_odometer||'0',
+        end_odometer: vehicle_usage.end_odometer|| '0',
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const handleDialogClose = (isOpen) => {
@@ -104,14 +107,12 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
     {
         if (!dateTimeString) return '-';
         const date = new Date(dateTimeString);
-        
         // Convert to UTC+8
-        
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const month = String(date.toLocaleString('en-My', { month: 'long' }));
         const year = date.getFullYear();
         
-        return `${day}/${month}/${year}`;
+        return `${day} ${month} ${year}`;
     };
 
     if(isDesktop)
@@ -125,8 +126,8 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
                                 <div className='uppercase font-bold'>
                                     {getVehiclePlateNumber (vehicle_usage.vehicle_uuid)}                                          
                             </div>
-                                <div className="">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` / ${formatDateTime(vehicle_usage.end_date)}`}</div> 
-                                <div className="">{vehicle_usage.destination}</div> 
+                                <div className="text-sm">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` - ${formatDateTime(vehicle_usage.end_date)}`}</div> 
+                                <div className="text-sm">{vehicle_usage.destination}</div> 
                                 <div className='flex'>
                                 {/* <div className="flex items-center bg-amber-500 text-white py-1 px-3 rounded-md">
                                     {vehicle_usage.application_status}
@@ -147,6 +148,18 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
                                     <span class='flex items-center bg-red-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
                                         <span class="h-1.5 w-1.5 bg-red-600 rounded-full me-1"></span>
                                         Rejected
+                                    </span>
+                                )}
+                                {vehicle_usage.application_status === 'progress' && (
+                                    <span class='flex items-center bg-blue-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                        <span class="h-1.5 w-1.5 bg-blue-600 rounded-full me-1"></span>
+                                        In Progress
+                                    </span>
+                                )}
+                                {vehicle_usage.application_status === 'finished' && (
+                                    <span class='flex items-center bg-green-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                        <span class="h-1.5 w-1.5 bg-green-600 rounded-full me-1"></span>
+                                        Finished
                                     </span>
                                 )}
                                 </div>
@@ -173,30 +186,39 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
                                 <div className='uppercase font-bold'>
                                     {getVehiclePlateNumber (vehicle_usage.vehicle_uuid)}                                          
                             </div>
-                                <div className="">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` / ${formatDateTime(vehicle_usage.end_date)}`}</div> 
-                                <div className="">{vehicle_usage.destination}</div> 
+                                <div className="text-sm">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` - ${formatDateTime(vehicle_usage.end_date)}`}</div> 
+                                <div className="text-sm">{vehicle_usage.destination}</div> 
                                 <div className='flex'>
-                                {/* <div className="flex items-center bg-amber-500 text-white py-1 px-3 rounded-md">
-                                    {vehicle_usage.application_status}
-                                </div> */}
-                                {vehicle_usage.application_status === 'pending' && (
-                                    <span class='flex items-center bg-amber-200 border border-warning-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
-                                        <span class="h-1.5 w-1.5 bg-amber-700 rounded-full me-1"></span>
-                                        Pending
-                                    </span>
-                                )}
-                                {vehicle_usage.application_status === 'approved' && (
-                                    <span class='flex items-center bg-lime-200 border border-success-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
-                                        <span class="h-1.5 w-1.5 bg-lime-600 rounded-full me-1"></span>
-                                        Approved
-                                    </span>
-                                )}
-                                {vehicle_usage.application_status === 'rejected' && (
-                                    <span class='flex items-center bg-red-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
-                                        <span class="h-1.5 w-1.5 bg-red-600 rounded-full me-1"></span>
-                                        Rejected
-                                    </span>
-                                )}
+                                    {vehicle_usage.application_status === 'pending' && (
+                                        <span class='flex items-center bg-amber-200 border border-warning-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                            <span class="h-1.5 w-1.5 bg-amber-700 rounded-full me-1"></span>
+                                            Pending
+                                        </span>
+                                    )}
+                                    {vehicle_usage.application_status === 'approved' && (
+                                        <span class='flex items-center bg-lime-200 border border-success-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                            <span class="h-1.5 w-1.5 bg-lime-600 rounded-full me-1"></span>
+                                            Approved
+                                        </span>
+                                    )}
+                                    {vehicle_usage.application_status === 'rejected' && (
+                                        <span class='flex items-center bg-red-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                            <span class="h-1.5 w-1.5 bg-red-600 rounded-full me-1"></span>
+                                            Rejected
+                                        </span>
+                                    )}
+                                    {vehicle_usage.application_status === 'progress' && (
+                                        <span class='flex items-center bg-blue-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                            <span class="h-1.5 w-1.5 bg-blue-600 rounded-full me-1"></span>
+                                            In Progress
+                                        </span>
+                                    )}
+                                    {vehicle_usage.application_status === 'finished' && (
+                                        <span class='flex items-center bg-green-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                            <span class="h-1.5 w-1.5 bg-green-600 rounded-full me-1"></span>
+                                            Finished
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>                           
@@ -213,10 +235,62 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
 
     function ViewRequestedVehicle()
     {
+        const formatDay = (dateString) => 
+        {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${day}`;
+        };
+        const formatMonth = (dateString) => 
+        {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            // const month = String(date.getMonth() + 1).padStart(2, '0');
+            return date.toLocaleString('en-My', { month: 'long' });
+        };
+
+        const getDistanceTraveled = () =>{
+            return data.end_odometer-data.start_odometer;
+        }
+
         return(
             <div className='p-4'>
                 <form onSubmit={submit}>
-                    <div className="items-center space-y-2">                      
+                    <div className="items-center space-y-2">
+                        <div className='flex'>
+                            {vehicle_usage.application_status === 'pending' && (
+                                <span class='flex items-center bg-amber-200 border border-warning-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                    <span class="h-1.5 w-1.5 bg-amber-700 rounded-full me-1"></span>
+                                    Pending
+                                </span>
+                            )}
+                            {vehicle_usage.application_status === 'approved' && (
+                                <span class='flex items-center bg-lime-200 border border-success-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                    <span class="h-1.5 w-1.5 bg-lime-600 rounded-full me-1"></span>
+                                    Approved
+                                </span>
+                            )}
+                            {vehicle_usage.application_status === 'rejected' && (
+                                <span class='flex items-center bg-red-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                    <span class="h-1.5 w-1.5 bg-red-600 rounded-full me-1"></span>
+                                    Rejected
+                                </span>
+                            )}
+                            {vehicle_usage.application_status === 'progress' && (
+                                <span class='flex items-center bg-blue-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                    <span class="h-1.5 w-1.5 bg-blue-600 rounded-full me-1"></span>
+                                    In Progress
+                                </span>
+                            )}
+                            {vehicle_usage.application_status === 'finished' && (
+                                <span class='flex items-center bg-green-200 border border-danger-subtle text-gray-700 text-xs font-medium px-1.5 py-0.5 rounded'>
+                                    <span class="h-1.5 w-1.5 bg-green-600 rounded-full me-1"></span>
+                                    Finished
+                                </span>
+                            )}
+                        </div>
+
                         <div>
                             <InputLabel
                                 value={
@@ -225,33 +299,35 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
                                     </>
                                 }
                             />
-                            {getVehiclePlateNumber (vehicle_usage.vehicle_uuid)}
+                            <div className='text-xl'>
+                                {getVehiclePlateNumber (vehicle_usage.vehicle_uuid)}
+                            </div>
                         </div>
                         
                         <div>
-                            <div>
-                                <InputLabel
-                                    value={
-                                        <>
-                                            Destination
-                                        </>
-                                    }
-                                />
-                                {vehicle_usage.destination}
-                            </div>
+                            <InputLabel
+                                value={
+                                    <>
+                                        Destination
+                                    </>
+                                }
+                            />
+                            {vehicle_usage.destination}
+                        </div>
 
-                            <div>
-                                <InputLabel
-                                    value={
-                                        <>
-                                            Purpose
-                                        </>
-                                    }
-                                />
-                                {vehicle_usage.purpose}
-                            </div>
+                        <div>
+                            <InputLabel
+                                value={
+                                    <>
+                                        Purpose
+                                    </>
+                                }
+                            />
+                            {vehicle_usage.purpose}
+                        </div>
 
-                            <div className="grid md:grid-cols-2 gap-2">
+                        {vehicle_usage.application_status !== 'finished' && (
+                            <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
                                 <div>
                                     <InputLabel
                                         value={
@@ -276,10 +352,191 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
                                 </div>
                                 )}
                             </div>
+                        )}
+
+                        {(vehicle_usage.application_status === 'pending' || vehicle_usage.application_status === 'approved') && (
                             <div className="mt-6">
-                                <DeleteRequestVehicle vehicleId={vehicle_usage.id}/>
+                            <DeleteRequestVehicle vehicleId={vehicle_usage.id}/>
+                        </div> 
+                        )}  
+                        
+
+                        {vehicle_usage.application_status === 'progress' && (
+                            <div className="grid grid-cols-3">  
+                                <div className='p-2 flex-row md:flex-col justify-items-center border border-gray-300 rounded-lg'>
+                                    <div className='text-xl font-bold'>
+                                        {formatDay(vehicle_usage.actual_start_datetime)}
+                                    </div>
+                                    <div>
+                                        {formatMonth(vehicle_usage.actual_start_datetime)}
+                                    </div>
+                                    <div>
+                                        <InputLabel
+                                            value={
+                                                <>
+                                                    Odometer
+                                                </>
+                                            }
+                                        />
+                                        {vehicle_usage.start_odometer}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            
+                        )}
+
+                        {vehicle_usage.application_status === 'finished' && (
+                            <div>
+                                {formatDay(vehicle_usage.actual_start_datetime) !== formatDay(vehicle_usage.actual_end_datetime)&& (
+                                <div className="grid grid-cols-3 items-center">
+                                    <div className='p-2 flex-row md:flex-col justify-items-center border border-gray-300 rounded-lg'>
+                                        <div className='text-xl font-bold'>
+                                            {formatDay(vehicle_usage.actual_start_datetime)}
+                                        </div>
+                                        <div>
+                                            {formatMonth(vehicle_usage.actual_start_datetime)}
+                                        </div>
+                                        <div className='flex flex-col items-center'>
+                                            <InputLabel
+                                                value={
+                                                    <>
+                                                        Odometer
+                                                    </>
+                                                }
+                                            />
+                                            <div>
+                                                {vehicle_usage.start_odometer}
+                                                {formatDay(vehicle_usage.actual_end_datetime) === formatDay(vehicle_usage.actual_start_datetime) &&(
+                                                    <span>-{vehicle_usage.end_odometer}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {formatDay(vehicle_usage.actual_end_datetime) !== formatDay(vehicle_usage.actual_start_datetime) && (
+                                    <div className='mt-8 justify-items-center'>
+                                        <div className='block'>
+                                            <ArrowRight />
+                                        </div>
+                                    </div>
+                                    )}
+
+                                    {formatDay(vehicle_usage.actual_end_datetime) !== formatDay(vehicle_usage.actual_start_datetime) &&(
+                                        <div className='p-2 flex-row md:flex-col justify-items-center border border-gray-300 rounded-lg'> 
+                                            <div className='text-xl font-bold'>
+                                                {formatDay(vehicle_usage.actual_end_datetime)}
+                                            </div>
+                                            <div>
+                                                {formatMonth(vehicle_usage.actual_end_datetime)}
+                                            </div>
+                                            <div className='flex flex-col items-center'>
+                                                <InputLabel
+                                                    value={
+                                                        <>
+                                                            Odometer
+                                                        </>
+                                                    }
+                                                />
+                                                <div>
+                                                    {vehicle_usage.end_odometer}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                )}
+
+                                {formatDay(vehicle_usage.actual_start_datetime) === formatDay(vehicle_usage.actual_end_datetime)&& (
+                                <div className="grid grid-cols-1 items-center">
+                                    <div className='p-2 flex-row md:flex-col justify-items-center border border-gray-300 rounded-lg'>
+                                        <div className='text-xl font-bold'>
+                                            {formatDay(vehicle_usage.actual_start_datetime)}
+                                        </div>
+                                        <div>
+                                            {formatMonth(vehicle_usage.actual_start_datetime)}
+                                        </div>
+                                        <div className='flex flex-col items-center'>
+                                            <InputLabel
+                                                value={
+                                                    <>
+                                                        Odometer
+                                                    </>
+                                                }
+                                            />
+                                            <div>
+                                                {vehicle_usage.start_odometer}
+                                                {formatDay(vehicle_usage.actual_end_datetime) === formatDay(vehicle_usage.actual_start_datetime) &&(
+                                                    <span>-{vehicle_usage.end_odometer}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                    {/*{formatDay(vehicle_usage.actual_end_datetime) !== formatDay(vehicle_usage.actual_start_datetime) && (
+                                    <div className='mt-9 justify-items-center'>
+                                        <div className='block'>
+                                            <ArrowRight />
+                                        </div>
+                                    </div>
+                                    )}
+
+                                    {formatDay(vehicle_usage.actual_end_datetime) !== formatDay(vehicle_usage.actual_start_datetime) &&(
+                                        <div className='p-2 flex-row md:flex-col justify-items-center border border-gray-300 rounded-lg'> 
+                                            <div className='text-xl font-bold'>
+                                                {formatDay(vehicle_usage.actual_end_datetime)}
+                                            </div>
+                                            <div>
+                                                {formatMonth(vehicle_usage.actual_end_datetime)}
+                                            </div>
+                                            <div>
+                                                <InputLabel
+                                                    value={
+                                                        <>
+                                                            Odometer
+                                                        </>
+                                                    }
+                                                />
+                                                {vehicle_usage.end_odometer}
+                                            </div>
+                                        </div>
+                                    )} */}
+                                </div>
+                                )}
+
+                                <div>
+                                    <InputLabel
+                                        value={
+                                            <>
+                                            Distance Travelled
+                                            </>
+                                        }
+                                    />
+                                    {getDistanceTraveled()} KM
+                                </div>
+
+                                <div>
+                                    <InputLabel
+                                        value={
+                                            <>
+                                                Remarks
+                                            </>
+                                        }
+                                    />
+                                    {vehicle_usage.notes_on_return ?? '-'}
+                                </div>
+
+                                <div>
+                                    <InputLabel
+                                        value={
+                                            <>
+                                                Fuel Transaction
+                                            </>
+                                        }
+                                    />
+                                    -{/* {vehicle_usage.end_odometer} */}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </form>
             </div>

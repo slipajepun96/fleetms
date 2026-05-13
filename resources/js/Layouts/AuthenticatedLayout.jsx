@@ -5,7 +5,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function AuthenticatedLayout({ header, children, approver_status }) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -36,6 +36,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Configuration
                                 </NavLink>
+                                
+                                <NavLink
+                                    href={route('management.index')}
+                                    active={route().current('management.index')}
+                                >
+                                    Fleet Management
+                                </NavLink>
+                                
                             </div>
                             
                         </div>

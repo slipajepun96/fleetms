@@ -65,12 +65,12 @@ export default function DeleteRequestVehicle({ vehicleId }) {
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
             <DialogTrigger asChild>
                 <PrimaryButton variant="outline">
-                    Delete Requested Vehicle
+                    Delete Request 
                 </PrimaryButton>
             </DialogTrigger>
             <DialogContent className="max-w-xl">
                 <DialogHeader>
-                    <DialogTitle>Delete Requested Vehicle</DialogTitle>
+                    <DialogTitle>Delete Request Vehicle</DialogTitle>
                 </DialogHeader>
                 <div className="mt-4">
                     <form onSubmit={submit}>

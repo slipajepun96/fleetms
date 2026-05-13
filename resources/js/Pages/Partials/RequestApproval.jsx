@@ -108,17 +108,30 @@ export default function RequestApproval({vehicle_usage, vehicles, users}) {
         return vehicle ? vehicle.vehicle_manufacturer : 'Unknown Vehicle';
     } 
     
+    // const formatDateTime = (dateTimeString) => 
+    // {
+    //     if (!dateTimeString) return '-';
+    //     const date = new Date(dateTimeString);
+    //     // Convert to UTC+8
+    //     const day = String(date.getDate()).padStart(2, '0');
+    //     const month = String(date.getMonth() + 1).padStart(2, '0');
+    //     const year = date.getFullYear();
+        
+    //     return `${day}/${month}/${year}`;
+    // };
+
     const formatDateTime = (dateTimeString) => 
     {
         if (!dateTimeString) return '-';
         const date = new Date(dateTimeString);
         // Convert to UTC+8
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const month = String(date.toLocaleString('en-My', { month: 'long' }));
         const year = date.getFullYear();
         
-        return `${day}/${month}/${year}`;
+        return `${day} ${month} ${year}`;
     };
+    
     const formatDay = (dateString) => 
     {
         if (!dateString) return '-';
@@ -151,7 +164,7 @@ export default function RequestApproval({vehicle_usage, vehicles, users}) {
                                 <div className='uppercase font-bold'>
                                     {getVehiclePlateNumber (vehicle_usage.vehicle_uuid)}                                          
                             </div>
-                                <div className="">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` / ${formatDateTime(vehicle_usage.end_date)}`}</div> 
+                                <div className="">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` - ${formatDateTime(vehicle_usage.end_date)}`}</div> 
                                 <div className="">{vehicle_usage.destination}</div> 
                                 <div className='flex'>
                                 {/* <div className="flex items-center bg-amber-500 text-white py-1 px-3 rounded-md">
@@ -199,7 +212,7 @@ export default function RequestApproval({vehicle_usage, vehicles, users}) {
                                 <div className='uppercase font-bold'>
                                     {getVehiclePlateNumber (vehicle_usage.vehicle_uuid)}                                          
                             </div>
-                                <div className="">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` / ${formatDateTime(vehicle_usage.end_date)}`}</div> 
+                                <div className="">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` - ${formatDateTime(vehicle_usage.end_date)}`}</div> 
                                 <div className="">{vehicle_usage.destination}</div> 
                                 <div className='flex'>
                                 {/* <div className="flex items-center bg-amber-500 text-white py-1 px-3 rounded-md">
@@ -344,15 +357,11 @@ export default function RequestApproval({vehicle_usage, vehicles, users}) {
                                     </SecondaryButton>
                                 </Link>
                                 <Link href={route('vehicle.approve', vehicle_usage.id)}>
-                                    <PrimaryButton>
+                                    <PrimaryButton className=''>
                                         Approve
                                     </PrimaryButton>
                                 </Link>
                             </div>
-
-                            {/* <div className="mt-6">
-                                <DeleteRequestVehicle vehicleId={vehicle_usage.id}/>
-                            </div> */}
                         </div>
                     </div>
                 </form>

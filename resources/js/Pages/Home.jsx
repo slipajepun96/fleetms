@@ -35,8 +35,9 @@ import RequestVehicle from './Partials/RequestVehicle';
 import ViewRequestVehicle from './Partials/ViewRequestVehicle';
 import RequestApproval from './Partials/RequestApproval';
 import StartUse from './Partials/StartUse';
+import InProgress from './Partials/InProgress';
 
-export default function Home({events, vehicles, vehicle, vehicle_usages, approver_status, users, vehicle_requests_pending, requests_approved}) {
+export default function Home({events, vehicles, vehicle, vehicle_usages, approver_status, users, vehicle_requests_pending, requests_approved, vehicle_in_progress, fuelTransactions}) {
     const [showForm, setShowForm] = useState(false);
     const [openEventDate, setOpenEventDate] = useState(false);
     const [shouldSubmit, setShouldSubmit] = useState(false);
@@ -73,7 +74,7 @@ export default function Home({events, vehicles, vehicle, vehicle_usages, approve
                             Make Your Attendance Easy with <b>attend</b>!
                         </div>
                     </div> */}
-                    <div className="grid flex-1 gap-2 md:grid-cols-6 my-2">
+                    <div className="grid flex-1 grid-cols-2 gap-2 md:grid-cols-6 my-2">
                         <div>
                             <RequestVehicle vehicles={vehicles}/>
                         </div>
@@ -92,18 +93,31 @@ export default function Home({events, vehicles, vehicle, vehicle_usages, approve
                                 {vehicle_requests_pending.map((vehicle_request_pending) => (
                                     <RequestApproval vehicle_usage={vehicle_request_pending} vehicles={vehicles} users={users}/>
                                 ))}{vehicle_requests_pending.length === 0 && (
-                                    <div>Nothing to approve</div>
+                                    <div>Nothing to Approve</div>
                                 )}
                                 </div>
                             </div>
                         </div>
                     )}
+
+                    <div className="p-2 md:p-2 text-gray-900 border-t-2 border-gray-700">
+                        <div className="font-bold">
+                            In Progress
+                        </div>
+                        <div className="grid flex-1 gap-2 md:grid-cols-3 my-2">
+                            {vehicle_in_progress.map((vehicle_in_progress) => (
+                                <InProgress vehicle_usage={vehicle_in_progress} vehicles={vehicles} fuelTransactions={fuelTransactions}/>
+                            ))}{vehicle_in_progress.length === 0 && (
+                                <div>Nothing Started</div>
+                            )}
+                        </div>
+                    </div>
                     
                     <div className="p-2 md:p-2 text-gray-900 border-t-2 border-gray-700">
                         <div className="font-bold">
                             My Request
                         </div>
-                        <div className="grid flex-1 gap-2 md:grid-cols-3 my-2">
+                        <div className="grid grid-cols-2 flex-1 gap-2 md:grid-cols-3 my-2">
                             {vehicle_usages.map((vehicle_usage) => (
                                 <ViewRequestVehicle vehicle_usage={vehicle_usage} vehicles={vehicles}/>
                             ))}

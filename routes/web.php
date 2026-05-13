@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Configuration\VehicleController;
 use App\Http\Controllers\Configuration\UserController;
 use App\Http\Controllers\Configuration\ConfigurationController;
+use App\Http\Controllers\ManagementController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -37,7 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/home/delete', [HomeController::class, 'deleteRequestedVehicle'])->name('vehicle.deleteRequested');
     Route::get('/home/approve/{id}', [HomeController::class, 'approveRequestVehicle'])->name('vehicle.approve');
     Route::get('/home/reject/{id}', [HomeController::class, 'rejectRequestVehicle'])->name('vehicle.reject');
+
+    //use vehicle
     Route::post('/home/start-use', [HomeController::class, 'startUseVehicle'])->name('vehicle.startUse');
+    Route::post('/home/end-use', [HomeController::class, 'endUseVehicle'])->name('vehicle.endUse');
+    Route::post('/home/fuel-use', [HomeController::class, 'saveFuelTransaction'])->name('vehicle.saveFuelTransaction');
 
     //vehicle
     Route::get('/car', [VehicleController::class, 'carIndex'])->name('vehicle.index');
@@ -53,6 +58,9 @@ Route::middleware('auth')->group(function () {
 
     //configuration
     Route::get('/configuration', [ConfigurationController::class, 'configurationIndex'])->name('configuration.index');
+
+    //management
+    Route::get('/management', [ManagementController::class, 'managementIndex'])->name('management.index');
     
     //event
     Route::post('/events', [EventController::class, 'saveNewEvent'])->name('event.saveNewEvent');
@@ -61,5 +69,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/e/{event_id}', [EventController::class, 'publicAttendanceRegisterForm'])->name('public.event.attendance.form');
 Route::post('/e/{event_id}', [EventController::class, 'publicAttendanceRegisterFormSubmit'])->name('public.event.attendance.submitForm');
+
+// Route::get('/test', [HomeController::class, 'test'])->name('test');
 
 require __DIR__.'/auth.php';

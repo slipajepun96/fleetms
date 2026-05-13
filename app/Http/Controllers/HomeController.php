@@ -15,6 +15,7 @@ use Inertia\Response;
 use App\Models\Vehicle;
 use App\Models\VehicleUsage;
 use App\Models\User;
+use App\Models\FuelTransaction;
 
 
 class HomeController extends Controller
@@ -25,14 +26,19 @@ class HomeController extends Controller
         $vehicles = Vehicle::where('is_active', 1)->get();
         $vehicleUsages = VehicleUsage::where('user_uuid', Auth::user()->id)->get();
         $vehicleRequestPending = VehicleUsage::where('application_status', 'pending')->get();
+        $vehicleInProgress = VehicleUsage::where('application_status', 'progress')->get();
         $users = User::all();
+        $fuelTransactions = FuelTransaction::all();
+        // dd($fuelTransactions);
         $requestApproved = VehicleUsage::where('user_uuid', Auth::user()->id)->where('application_status', 'approved')->get();
         return Inertia::render('Home', [
             'vehicles' => $vehicles,
             'vehicle_usages' => $vehicleUsages,
             'vehicle_requests_pending' => $vehicleRequestPending,
+            'vehicle_in_progress' => $vehicleInProgress,
             'approver_status' => $approverStatus,
             'users' => $users,
+            'fuelTransactions' => $fuelTransactions,
             'requests_approved' => $requestApproved,
         ]);
     }
@@ -96,14 +102,60 @@ class HomeController extends Controller
     public function startUseVehicle(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'id' => 'required',
-            'current_odometer' => 'required|string|max:255',
+            'vehicle_usage_uuid' => 'required',
+            'current_odometer' => 'nullable|string|max:255',
+            'actual_start_datetime' => 'nullable|date',
         ]);
+        $vehicleUsage = VehicleUsage::findOrFail($validated['vehicle_usage_uuid']);
+        $vehicleUsage->start_odometer = $validated['current_odometer'];
+        $vehicleUsage->actual_start_datetime = now();
+        $vehicleUsage->application_status = 'progress';
+        $vehicleUsage->save();
 
-        $vehicle = Vehicle::findOrFail($validatedd['id']);
-        $vehicle->current_odometer = $validated['current_odometer'];
-        $vehicle->save();
+        return back()->with('success', 'Vehicle use started successfully.');
+    }
 
-        return back()->with('success', 'User edit successfully.');
+    public function endUseVehicle(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'vehicle_usage_uuid' => 'required',
+            'actual_start_datetime' => 'nullable|date',
+            'end_odometer' => 'nullable|string|max:255',
+            'notes_on_return' => 'nullable|string|max:255',
+        ]);
+        // dd($validated);
+        $vehicleUsage = VehicleUsage::findOrFail($validated['vehicle_usage_uuid']);
+        $vehicleUsage->end_odometer = $validated['end_odometer'];
+        $vehicleUsage->application_status = 'finished';
+        $vehicleUsage->actual_end_datetime = now();
+        $vehicleUsage->notes_on_return = $validated['notes_on_return'];
+        $vehicleUsage->return_datetime = now();
+        $vehicleUsage->return_user_uuid = Auth::user()->id;
+        $vehicleUsage->save();
+
+        return back()->with('success', 'Vehicle use ended successfully.');
+    }
+
+    public function saveFuelTransaction(Request $request): RedirectResponse
+    { 
+        $validated = $request->validate([
+            'vehicle_usage_uuid' => 'required',
+            'fuel_type' => 'nullable|string|max:255',
+            'fuel_total_price' => 'nullable|string|max:255',
+            'fuel_liter' => 'nullable|string|max:255',
+            'transaction_date' => 'nullable|date',
+        ]);
+        // dd($validated);
+        $fuelTransaction = new FuelTransaction();
+        $fuelTransaction->vehicle_usage_uuid = $validated['vehicle_usage_uuid'];
+        $fuelTransaction->fuel_type = $validated['fuel_type'];
+        $fuelTransaction->fuel_total_price = $validated['fuel_total_price'];
+        $fuelTransaction->fuel_liter = $validated['fuel_liter'];
+        $fuelTransaction->transaction_date = $validated['transaction_date'];
+        $fuelTransaction->save();
+        // dd($fuelTransaction);
+        // return back()->with('success', 'Vehicle fuel save successfully.');
+        // return Redirect::route('home')->with('success', 'Vehicle fuel save successfully.');
+        return to_route('home');
     }
 }
