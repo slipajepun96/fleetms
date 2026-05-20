@@ -29,7 +29,6 @@ class HomeController extends Controller
         $vehicleInProgress = VehicleUsage::where('application_status', 'progress')->get();
         $users = User::all();
         $fuelTransactions = FuelTransaction::all();
-        // dd($fuelTransactions);
         $requestApproved = VehicleUsage::where('user_uuid', Auth::user()->id)->where('application_status', 'approved')->get();
         return Inertia::render('Home', [
             'vehicles' => $vehicles,
@@ -46,8 +45,6 @@ class HomeController extends Controller
     public function requestVehicle(Request $request): RedirectResponse
     {
         $user_uuid = Auth::user()->id;
-        
-        // dd($request->all());
         $validated = $request->validate([
             'vehicle_uuid' => 'required|string|max:255',
             'destination' => 'required|string|max:255',
@@ -69,12 +66,9 @@ class HomeController extends Controller
 
     public function deleteRequestedVehicle(Request $request): RedirectResponse
     {
-        // dd($request->all());
         VehicleUsage::findOrFail($request->id)->delete();
         
         return Redirect::route('home')->with('success', 'Requested vehicle deleted successfully.');
-
-         
     }
 
     public function approveRequestVehicle(Request $request): RedirectResponse
@@ -104,14 +98,14 @@ class HomeController extends Controller
         $validated = $request->validate([
             'vehicle_usage_uuid' => 'required',
             'current_odometer' => 'nullable|string|max:255',
-            'actual_start_datetime' => 'nullable|date',
+            'actual_start_datetime' => 'nullable|string',
         ]);
         $vehicleUsage = VehicleUsage::findOrFail($validated['vehicle_usage_uuid']);
         $vehicleUsage->start_odometer = $validated['current_odometer'];
         $vehicleUsage->actual_start_datetime = now();
         $vehicleUsage->application_status = 'progress';
         $vehicleUsage->save();
-
+        
         return back()->with('success', 'Vehicle use started successfully.');
     }
 
@@ -133,6 +127,10 @@ class HomeController extends Controller
         $vehicleUsage->return_user_uuid = Auth::user()->id;
         $vehicleUsage->save();
 
+        $vehicle = Vehicle::findOrFail($vehicleUsage->vehicle_uuid);
+        $vehicle->current_odometer = $validated['end_odometer'];
+        $vehicle->save();
+
         return back()->with('success', 'Vehicle use ended successfully.');
     }
 
@@ -145,7 +143,6 @@ class HomeController extends Controller
             'fuel_liter' => 'nullable|string|max:255',
             'transaction_date' => 'nullable|date',
         ]);
-        // dd($validated);
         $fuelTransaction = new FuelTransaction();
         $fuelTransaction->vehicle_usage_uuid = $validated['vehicle_usage_uuid'];
         $fuelTransaction->fuel_type = $validated['fuel_type'];
@@ -153,9 +150,7 @@ class HomeController extends Controller
         $fuelTransaction->fuel_liter = $validated['fuel_liter'];
         $fuelTransaction->transaction_date = $validated['transaction_date'];
         $fuelTransaction->save();
-        // dd($fuelTransaction);
-        // return back()->with('success', 'Vehicle fuel save successfully.');
-        // return Redirect::route('home')->with('success', 'Vehicle fuel save successfully.');
+        
         return to_route('home');
     }
 }

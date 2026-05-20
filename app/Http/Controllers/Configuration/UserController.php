@@ -17,7 +17,6 @@ class UserController extends Controller
 {
     public function index(): Response
     {
-        // dd('test');
         $users = User::all();
         return Inertia::render('Configuration/User/User', [
             'users' => $users,
@@ -26,7 +25,6 @@ class UserController extends Controller
 
     public function editUser(Request $request): RedirectResponse
     {
-        // dd($request->all());
         $validated = $request->validate([
             'id' => 'required',
             'name' => 'required|string|max:255',
@@ -36,8 +34,6 @@ class UserController extends Controller
             'designation' => 'nullable|string|max:255',
             'is_approver' => 'nullable|integer',
         ]);
-        // dd($validated);
-
         $users = User::findOrFail($validated['id']);
         $users->name = $validated['name'];
         $users->actual_name = $validated['actual_name'];
@@ -47,15 +43,11 @@ class UserController extends Controller
         $users->is_approver = $validated['is_approver'];
         $users->save();
         
-        // dd($vehicle);
-
-        // return Redirect:: route('user.index');
         return back()->with('success', 'User edit successfully.');
     }
 
     public function changeAuthorisation(Request $request): RedirectResponse 
     {
-        // dd($request->all());
         $user = User::findOrFail($request->id);
         if ($request->current_is_authorised === 0)
             {
@@ -66,16 +58,12 @@ class UserController extends Controller
             $user->is_authorised = 0;
             }
         $user->save();
-
-        // return Redirect::route('user.index');
         return back()->with('success', 'User authorised status updated successfully.');
     }
 
     public function deleteUser(Request $requestd): RedirectResponse
     {
-        // dd($requestd->id);
         User::findOrFail($requestd->id)->delete();
-        
         return Redirect::route('user.index')->with('success', 'User deleted successfully.');         
     }
 }

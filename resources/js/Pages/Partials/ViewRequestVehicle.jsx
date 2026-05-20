@@ -125,7 +125,7 @@ export default function ViewRequestVehicle({vehicle_usage, vehicle_usages, vehic
                             <div className=''>
                                 <div className='uppercase font-bold'>
                                     {getVehiclePlateNumber (vehicle_usage.vehicle_uuid)}                                          
-                            </div>
+                                </div>
                                 <div className="text-sm">{formatDateTime(vehicle_usage.start_date)}{vehicle_usage.end_date !== vehicle_usage.start_date && ` - ${formatDateTime(vehicle_usage.end_date)}`}</div> 
                                 <div className="text-sm">{vehicle_usage.destination}</div> 
                                 <div className='flex'>

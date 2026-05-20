@@ -17,7 +17,6 @@ class VehicleController extends Controller
 {
     public function carIndex(): Response
     {
-        // dd('test');
         $vehicles = vehicle::all();
         return Inertia::render('Configuration/Car/Vehicle', [
            'vehicles' => $vehicles,
@@ -26,8 +25,6 @@ class VehicleController extends Controller
 
     public function saveVehicle(Request $request): RedirectResponse
     {
-        // $vehicle = Vehicle:: all();
-        // dd($request->all());
         $validated = $request->validate([
             'plateNum' => 'required|string|max:255',
             'vehicle_manufacturer' => 'required|string|max:255',
@@ -37,8 +34,9 @@ class VehicleController extends Controller
             'vehicle_type' => 'required|string|max:255',
             'designated_person' => 'nullable|string|max:255',
             'owner_entity' => 'required|string|max:255',
+            'initial_odometer' => 'required|string|max:255',
         ]);
-        // dd($validated);
+        
         $vehicle = new Vehicle();
         $vehicle->plateNum = $validated['plateNum'];
         $vehicle->vehicle_manufacturer = $validated['vehicle_manufacturer'];
@@ -48,17 +46,16 @@ class VehicleController extends Controller
         $vehicle->vehicle_type = $validated['vehicle_type'];
         $vehicle->designated_person = $validated['designated_person'];
         $vehicle->owner_entity = $validated['owner_entity'];
+        $vehicle->initial_odometer = $validated['initial_odometer'];
+        $vehicle->current_odometer = $validated['initial_odometer'];
+        
         $vehicle->save();
-
-        // dd($vehicle);
 
         return Redirect:: route('vehicle.index');
     }
 
     public function editVehicle(Request $request): RedirectResponse
     {
-        // $vehicle = Vehicle:: all();
-        // dd($request->all());
         $validated = $request->validate([
             'id' => 'required',
             'plateNum' => 'required|string|max:255',
@@ -70,8 +67,8 @@ class VehicleController extends Controller
             'vehicle_type' => 'required|string|max:255',
             'designated_person' => 'nullable|string|max:255',
             'owner_entity' => 'required|string|max:255',
+            'current_odometer' => 'required|string|max:255',
         ]);
-        // dd($validated);
 
         $vehicle = Vehicle::findOrFail($validated['id']);
         $vehicle->plateNum = $validated['plateNum'];
@@ -83,20 +80,15 @@ class VehicleController extends Controller
         $vehicle->vehicle_type = $validated['vehicle_type'];
         $vehicle->designated_person = $validated['designated_person'];
         $vehicle->owner_entity = $validated['owner_entity'];
+        $vehicle->current_odometer = $validated['current_odometer'];
         $vehicle->save();
-
-        // dd($vehicle);
 
         return Redirect:: route('vehicle.index');
     }
 
     public function deleteVehicle(Request $requestd): RedirectResponse
     {
-        // dd($request->all());
         Vehicle::findOrFail($requestd->id)->delete();
-        
         return Redirect::route('vehicle.index')->with('success', 'Vehicle deleted successfully.');
-
-         
     }
 }

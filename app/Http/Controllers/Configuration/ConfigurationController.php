@@ -16,7 +16,6 @@ class ConfigurationController extends Controller
 {
     public function configurationIndex(): Response
     {
-        
         return Inertia::render('Configuration/ConfigurationIndex');
     }
 }

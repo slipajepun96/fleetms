@@ -5,12 +5,13 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function AuthenticatedLayout({ header, children, approver_status }) {
+export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+        // console.log(user);
     return (
         <div className="min-h-screen bg-white">
             <nav className=" ">
@@ -36,14 +37,14 @@ export default function AuthenticatedLayout({ header, children, approver_status 
                                 >
                                     Configuration
                                 </NavLink>
-                                
+                                {user.is_approver === 1 && (
                                 <NavLink
+                                
                                     href={route('management.index')}
                                     active={route().current('management.index')}
                                 >
                                     Fleet Management
-                                </NavLink>
-                                
+                                </NavLink>)}
                             </div>
                             
                         </div>

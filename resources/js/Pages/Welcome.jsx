@@ -6,8 +6,6 @@ import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 
-
-
 export default function Welcome({ auth, canResetPassword, status }) {
     const [formType, setFormType] = useState('login'); // 'login', 'register', or 'admin'
 

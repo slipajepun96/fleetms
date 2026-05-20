@@ -44,6 +44,7 @@ export default function VehicleEditVehicle({vehicle}) {
         vehicle_type: vehicle.vehicle_type || '-',
         designated_person: vehicle.designated_person || '-',
         owner_entity: vehicle.owner_entity || '-',
+        current_odometer: vehicle.current_odometer || '-',
     });
     // console.log('id'+data.id)
 
@@ -64,6 +65,7 @@ export default function VehicleEditVehicle({vehicle}) {
               'vehicle_type',
               'designated_person',
               'owner_entity',
+              'current_odometer',
             );
         }
     };
@@ -85,6 +87,7 @@ export default function VehicleEditVehicle({vehicle}) {
                     'vehicle_type',
                     'designated_person',
                     'owner_entity',
+                    'current_odometer',
                 )
                 setIsDialogOpen(false);
             }
@@ -347,6 +350,31 @@ export default function VehicleEditVehicle({vehicle}) {
                                 />
                                 <InputError
                                     message={errors.owner_entity}
+                                    className="mt-2"
+                                />
+                            </div>
+
+                            <div>
+                                <InputLabel
+                                    value={
+                                        <>
+                                            Current Odometer<span className="text-red-500">*</span>
+                                        </>
+                                    }
+                                />
+                                <TextInput
+                                    id="current_odometer"
+                                    name="current_odometer"
+                                    value={data.current_odometer}
+                                    className="mt-1 block w-full"
+                                    isFocused={true}
+                                    onChange={(e) =>
+                                        setData('current_odometer', e.target.value)
+                                    }
+                                    required
+                                />
+                                <InputError
+                                    message={errors.current_odometer}
                                     className="mt-2"
                                 />
                             </div>

@@ -37,11 +37,16 @@ import RequestApproval from '../Partials/RequestApproval';
 import StartUse from '../Partials/StartUse';
 import InProgress from '../Partials/InProgress';
 
-export default function ManagementIndex({events, vehicles, vehicle, vehicle_usages, approver_status, users, current_entity}) {
+export default function ManagementIndex({events, vehicles, vehicle_usage, vehicle_usages, approver_status, users, current_entity}) {
     const [showForm, setShowForm] = useState(false);
     const [openEventDate, setOpenEventDate] = useState(false);
     const [shouldSubmit, setShouldSubmit] = useState(false);
     const { flash } = usePage().props;
+    const [usage_data, setUsageData] = useState([]);
+
+    useEffect(() => {
+        entityVehicleUsage(vehicle_usages, vehicles, current_entity);
+    }, [vehicle_usages, vehicles, current_entity]);
 
     const formatDateTime = (dateTimeString) => 
     {
@@ -55,9 +60,24 @@ export default function ManagementIndex({events, vehicles, vehicle, vehicle_usag
         return `${day} ${month} ${year}`;
     };
 
-    function entityVehicleUsage(vehicle_usages, vehicles){
-        const entity_vehicle_usage = vehicle_usages.find(v=> v.vehicle_uuid === vehicles.id);
+    function entityVehicleUsage(vehicle_usages, vehicles, current_entity, usage_data){
+        // ambil semua vehicle utk entity semasa
+        const entityVehicles = vehicles.filter(
+            vehicle => vehicle.owner_entity === current_entity
+        );
+
+        // ambil semua uuid vehicle
+        const vehicleUuids = entityVehicles.map(
+            vehicle => vehicle.id
+        );
+
+        // filter usage ikut vehicle uuid
+        const entity_vehicle_usage = vehicle_usages.filter(
+            usage => vehicleUuids.includes(usage.vehicle_uuid)
+        );
         console.log(entity_vehicle_usage);
+        setUsageData(entity_vehicle_usage);
+        
     }
 
     const displayEventForm = (type) => {
@@ -71,6 +91,7 @@ export default function ManagementIndex({events, vehicles, vehicle, vehicle_usag
 
     const getVehiclePlateNumber = (vehicle_uuid) => {
         const vehicle = vehicles.find(v => v.id === vehicle_uuid);
+        console.log(vehicle_uuid)
         return vehicle ? vehicle.plateNum : 'Unknown Vehicle';
     }
 
@@ -79,7 +100,15 @@ export default function ManagementIndex({events, vehicles, vehicle, vehicle_usag
         return user ? user.name : 'Unknown User';
     } 
 
+    const getVehicleModel = (vehicle_uuid) => {
+        const vehicle = vehicles?.find(v => v.id === vehicle_uuid);
+        return vehicle ? vehicle.vehicle_model : 'Unknown Vehicle';
+    }
 
+    const getVehicleManufacturer = (vehicle_uuid) => {
+        const vehicle = vehicles?.find(v => v.id === vehicle_uuid);
+        return vehicle ? vehicle.vehicle_manufacturer : 'Unknown Vehicle';
+    } 
 
     const columns= [
         {
@@ -164,23 +193,30 @@ export default function ManagementIndex({events, vehicles, vehicle, vehicle_usag
     return (
         <AuthenticatedLayout>
             <Head title="Home" />
-
             <div className="py-6 px-2">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    {/* <div className="overflow-hidden bg-gradient-to-bl from-black  to-slate-500 shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-white">
-                            Make Your Attendance Easy with <b>attend</b>!
+                    <div>
+                        <div className="p-2 font-bold">
+                            My Fleet
                         </div>
-                    </div> */}
-                    {/* <div className="grid flex-1 grid-cols-2 gap-2 md:grid-cols-6 my-2">
-                        <div>
-                            <RequestVehicle vehicles={vehicles}/>
-                        </div>
-                        <div>
-                            <StartUse vehicle_usages={vehicle_usages} vehicles={vehicles} requests_approved={requests_approved} vehicle={vehicle} />
-                        </div>
-                    </div> */}
-                    {entityVehicleUsage(vehicle_usages, current_entity)}
+                        
+                            <div className="grid flex-1 grid-cols-2 gap-2 md:grid-cols-6 my-2">
+                                {vehicles.map((vehicle) => (
+                                    <Link href={route('fleetDetail', vehicle.id)}>
+                                    <div className="p-4 text-gray-900 border border-gray-300 rounded-lg shadow hover:shadow-lg hover:font-extrabold">
+                                        <div className='uppercase font-bold'>
+                                            {vehicle.plateNum}
+                                        </div>
+                                        <div className=''>
+                                            {vehicle.vehicle_manufacturer} {vehicle.vehicle_model}
+                                        </div>
+                                    </div>
+                                   </Link> 
+                                ))}                                     
+                            </div>
+                        
+                    </div>
+                    {/* {entityVehicleUsage(vehicle_usages, vehicles, current_entity)} */}
                     <div className="p-2 md:p-2 text-gray-900 border-t-2 border-gray-700">
                         <div className="font-bold">
                             Fleet Movement
@@ -189,7 +225,7 @@ export default function ManagementIndex({events, vehicles, vehicle, vehicle_usag
                             <div className="md:mx-auto md:max-w-7xl lg:px-8">
                                 <div className="m-2 p-4 text-gray-900 border border-gray-300 rounded-lg shadow"> 
                                     <div className="text-gray-900">                                        
-                                        <DataTable columns={columns} data={vehicle_usages} className='mt-4'/>
+                                        <DataTable columns={columns} data={usage_data} className='mt-4'/>
                                     </div>
                                 </div>
                             </div>

@@ -42,6 +42,7 @@ export default function StartUse({vehicles, vehicle, vehicle_usages, requests_ap
         vehicle_usage_uuid: '',
         vehicle_uuid: '',
         current_odometer: '',
+        actual_start_datetime: '',
         
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -257,7 +258,7 @@ export default function StartUse({vehicles, vehicle, vehicle_usages, requests_ap
                                 <InputLabel
                                     value={
                                         <>
-                                            Start date time<span className="text-red-500">*</span>
+                                            Start Date Time<span className="text-red-500">*</span>
                                         </>
                                     }
                                 />

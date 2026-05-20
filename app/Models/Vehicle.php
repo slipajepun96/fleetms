@@ -40,5 +40,6 @@ class Vehicle extends Authenticatable
         'owner_entity',
         'is_active',
         'current_odometer',
+        'initial_odometer',
     ];
 }

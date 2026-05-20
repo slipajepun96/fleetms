@@ -42,6 +42,7 @@ export default function VehicleAddVehicle() {
         vehicle_type: '',
         designated_person: '',
         owner_entity: '',
+        initial_odometer: '',
     });
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -60,6 +61,7 @@ export default function VehicleAddVehicle() {
               'vehicle_type',
               'designated_person',
               'owner_entity',
+              'initial_odometer',
             );
         }
     };
@@ -80,6 +82,7 @@ export default function VehicleAddVehicle() {
                     'vehicle_type',
                     'designated_person',
                     'owner_entity',
+                    'initial_odometer',
                 )
                 setIsDialogOpen(false);
             }
@@ -342,6 +345,31 @@ export default function VehicleAddVehicle() {
                                 />
                                 <InputError
                                     message={errors.owner_entity}
+                                    className="mt-2"
+                                />
+                            </div>
+
+                            <div>
+                                <InputLabel
+                                    value={
+                                        <>
+                                            Initial Odometer<span className="text-red-500">*</span>
+                                        </>
+                                    }
+                                />
+                                <TextInput
+                                    id="initial_odometer"
+                                    name="initial_odometer"
+                                    value={data.initial_odometer}
+                                    className="mt-1 block w-full"
+                                    isFocused={true}
+                                    onChange={(e) =>
+                                        setData('initial_odometer', e.target.value)
+                                    }
+                                    required
+                                />
+                                <InputError
+                                    message={errors.initial_odometer}
                                     className="mt-2"
                                 />
                             </div>

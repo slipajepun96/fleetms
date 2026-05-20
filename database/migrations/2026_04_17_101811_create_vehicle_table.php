@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('owner_entity');
             $table->boolean('is_active')->default(1);
             $table->string('current_odometer')->nullable();
+            $table->string('initial_odometer')->nullable();
         });
     }
 

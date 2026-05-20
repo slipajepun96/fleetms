@@ -61,7 +61,9 @@ Route::middleware('auth')->group(function () {
 
     //management
     Route::get('/management', [ManagementController::class, 'managementIndex'])->name('management.index');
-    
+    Route::get('/management/{id}', [ManagementController::class, 'fleetDetail'])->name('fleetDetail');
+    Route::post('/management/view', [ManagementController::class, 'viewReport'])->name('viewReport');
+
     //event
     Route::post('/events', [EventController::class, 'saveNewEvent'])->name('event.saveNewEvent');
     Route::post('/events/delete', [EventController::class, 'deleteEvent'])->name('event.deleteEvent');
