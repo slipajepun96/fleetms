@@ -66,4 +66,19 @@ class UserController extends Controller
         User::findOrFail($requestd->id)->delete();
         return Redirect::route('user.index')->with('success', 'User deleted successfully.');         
     }
+
+    public function disableUser(Request $request): RedirectResponse 
+    {
+        $user = User::findOrFail($request->id);
+        if ($request->current_is_active === 1)
+            {
+            $user->is_active = 0;
+            }
+        else if ($request->current_is_active === 0)
+            {
+            $user->is_active = 1;
+            }
+        $user->save();
+        return back()->with('success', 'User active status updated successfully.');
+    }
 }

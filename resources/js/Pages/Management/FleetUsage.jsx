@@ -6,6 +6,10 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import SmallNavLink from '@/Components/SmallNavLink';
 import InputLabel from '@/Components/InputLabel';
 import { Link } from '@inertiajs/react';
+import ViewRecordMaintenance from './Partials/ViewRecordMaintenance';
+import EditRecordMaintenance from './Partials/EditRecordMaintenance';
+import DeleteRecordMaintenance from './Partials/DeleteRecordMaintenance';
+import RecordMaintenance from './Partials/RecordMaintenance';
 import {
     Select,
     SelectContent,
@@ -14,7 +18,7 @@ import {
     SelectValue,
 } from "@/Components/ui/select"
 
-export default function FleetUsage({ vehicle_usages, vehicle, currentView, statement_dates, previous_month_odometer }) {
+export default function FleetUsage({ vehicle_usages, vehicle, currentView, statement_dates, previous_month_odometer, maintenances, attachment_url }) {
 
     const { data, setData, errors, post,  put, reset, processing, recentlySuccessful,
     } = useForm({ 
@@ -34,7 +38,7 @@ export default function FleetUsage({ vehicle_usages, vehicle, currentView, state
         return `${day} ${month} ${year}`;
     };
 
-    console.log(currentView);
+    // console.log(currentView);
     const [loading, setLoading] = useState(false);
 
     const submit = (e) => {
@@ -119,6 +123,48 @@ export default function FleetUsage({ vehicle_usages, vehicle, currentView, state
         }
     ]
 
+    console.log(maintenances);
+    const columnMaintenance= [
+        {
+            Header: 'Date',
+            accessor: ['maintenance_date'],
+            Cell: ({row}) => (
+                <div className="flex flex-col">
+                    <div className='font-sm'>{formatDateTime(row.maintenance_date)}</div>
+                </div>
+            )
+        },
+        {
+            Header: 'Workshop',
+            accessor: ['workshop_name'],
+            Cell: ({row}) => (
+                <div className="flex flex-col">
+                    <div className='font-sm'>{row.workshop_name}</div>
+                </div>
+            )
+        },
+        {
+            Header: 'Summary',
+            accessor: ['summary'],
+            Cell: ({row}) => (
+                <div className="flex flex-col">
+                    <div className='font-sm'>{row.summary}</div>
+                </div>
+            )
+        },
+        {
+            Header: '',
+            accessor: ['start_odometer'],
+            Cell: ({row}) => (
+                <div className="flex space-x-2 gap-2">
+                    <ViewRecordMaintenance maintenance={row} attachment_address={row.attachment_url}/>
+                    <EditRecordMaintenance maintenance={row}/>
+                    <DeleteRecordMaintenance maintenance={row}/>
+                </div>
+            )
+        }
+    ]
+
     return (
         <div>
             <Head title="Home" />
@@ -142,9 +188,12 @@ export default function FleetUsage({ vehicle_usages, vehicle, currentView, state
                             <div className="py-2">
                                 <div className="md:mx-auto md:max-w-7xl lg:px-8">
                                     <div className="m-2 p-4 text-gray-900 border border-gray-300 rounded-lg shadow"> 
-                                        <PrimaryButton>+ Log</PrimaryButton>
+                                        {/* <div className="text-gray-900">
+                                            Maintenance Record
+                                        </div> */}
+                                        <RecordMaintenance vehicleUuid={vehicle.id} maintenances={maintenances}/>
                                         <div className="text-gray-900">                                        
-                                            <DataTable columns={columnUsage} data={vehicle_usages} className='mt-4'/>
+                                            <DataTable columns={columnMaintenance} data={maintenances ?? []} className='mt-4'/>
                                         </div>
                                     </div>
                                 </div>
@@ -178,9 +227,11 @@ export default function FleetUsage({ vehicle_usages, vehicle, currentView, state
                                                         ))}
                                                     </SelectContent>
                                                 </Select>
+                                                {/* <Link href={route('viewReport', previous_month_odometer)}> */}
                                                 <PrimaryButton disabled={data.selectedMonthYear === ''} previous_month_odometer={previous_month_odometer} >
                                                     Generate
                                                 </PrimaryButton>
+                                                {/* </Link> */}
                                             </div>
                                         </form>
                                     </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\Configuration\VehicleController;
 use App\Http\Controllers\Configuration\UserController;
 use App\Http\Controllers\Configuration\ConfigurationController;
 use App\Http\Controllers\ManagementController;
+use App\Http\Controllers\MaintenanceController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -55,14 +56,27 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/edit', [UserController::class, 'editUser'])->name('user.edit');
     Route::post('/user/authorised', [UserController::class, 'changeAuthorisation'])->name('user.authorise');
     Route::post('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
+    Route::post('/user/disable', [UserController::class, 'disableUser'])->name('user.disable');
 
     //configuration
     Route::get('/configuration', [ConfigurationController::class, 'configurationIndex'])->name('configuration.index');
 
     //management
     Route::get('/management', [ManagementController::class, 'managementIndex'])->name('management.index');
+    Route::get('/management/printtest/{vehicle_id}', [ManagementController::class, 'reportPrintPdf'])->name('reportPrintPdf');
     Route::get('/management/{id}', [ManagementController::class, 'fleetDetail'])->name('fleetDetail');
     Route::post('/management/view', [ManagementController::class, 'viewReport'])->name('viewReport');
+
+    //maintenance 
+    Route::get('/maintenance', [MaintenanceController::class, 'maintenanceRecord'])->name('maintenance.Record');
+    Route::post('/maintenance/new-record', [MaintenanceController::class, 'saveMaintenance'])->name('maintenance.save');
+    Route::post('/maintenance/record-edit', [MaintenanceController::class, 'editMaintenance'])->name('maintenance.edit');
+    Route::post('/maintenance/record-delete', [MaintenanceController::class, 'deleteMaintenance'])->name('maintenance.delete');
+    Route::get('/maintenance/attachment/{id}', [MaintenanceController::class, 'maintenanceAttachment'])->name('maintenance.attachment');
+
+    //pdf
+    Route::get('/testpdf', [ManagementController::class, 'testpdf'])->name('testpdf');
+    
 
     //event
     Route::post('/events', [EventController::class, 'saveNewEvent'])->name('event.saveNewEvent');

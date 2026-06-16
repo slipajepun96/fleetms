@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('designation')->nullable();
             $table->integer('is_admin')->default(0);
             $table->integer('is_approver')->default(0);
+            $table->boolean('is_active')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -76,7 +76,6 @@ class VehicleController extends Controller
         $vehicle->vehicle_model = $validated['vehicle_model'];
         $vehicle->insurance_expiry = $validated['insurance_expiry'];
         $vehicle->roadtax_expiry = $validated['roadtax_expiry'];
-        
         $vehicle->vehicle_type = $validated['vehicle_type'];
         $vehicle->designated_person = $validated['designated_person'];
         $vehicle->owner_entity = $validated['owner_entity'];

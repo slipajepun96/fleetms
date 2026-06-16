@@ -159,6 +159,16 @@ export default function AuthenticatedLayout({ header, children }) {
                             Configuration
                         </ResponsiveNavLink>
                     </div>
+                    <div className="space-y-1 pb-3 pt-2">
+                        {user.is_approver === 1 && (
+                        <NavLink
+                        
+                            href={route('management.index')}
+                            active={route().current('management.index')}
+                        >
+                            Fleet Management
+                        </NavLink>)}
+                    </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
                         <div className="px-4">

@@ -119,7 +119,7 @@ export default function Home({events, vehicles, vehicle, vehicle_usages, approve
                         </div>
                         <div className="grid grid-cols-2 flex-1 gap-2 md:grid-cols-3 my-2">
                             {vehicle_usages.map((vehicle_usage) => (
-                                <ViewRequestVehicle vehicle_usage={vehicle_usage} vehicles={vehicles}/>
+                                <ViewRequestVehicle vehicle_usage={vehicle_usage} vehicles={vehicles} fuelTransactions={fuelTransactions}/>
                             ))}
                         </div>
                     </div>

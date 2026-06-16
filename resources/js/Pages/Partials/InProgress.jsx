@@ -264,40 +264,39 @@ export default function InProgress({vehicle_usage, vehicles, users, vehicle_usag
                                 </div>
 
                                 <div className='grid grid-cols-2 gap-2'>
-                                
-                                {fuelTransactions.map((fuel_transaction) => ( 
-                                    <div key={fuel_transaction.id} >
-                                        {fuel_transaction.vehicle_usage_uuid === vehicle_usage.id && (   
-                                            <> 
-                                        {fuel_transaction.fuel_type === 'Diesel' && (
-                                            <div className="p-2 text-gray-900 border border-gray-900 bg-gray-500/20 rounded-lg shadow-md">
-                                                <div className='text-xl'>
-                                                    RM{fuel_transaction.fuel_total_price}
-                                                </div>
-                                                <div className=''>
-                                                    {formatDateTime(fuel_transaction.transaction_date)}
-                                                </div>
-                                                <div className=''>
-                                                    {fuel_transaction.fuel_liter} Liter
-                                                </div>
-                                            </div>   
-                                        )}
-                                        {fuel_transaction.fuel_type === 'Petrol' && (
-                                            <div className="p-2 text-gray-900 border border-yellow-300 bg-yellow-500/20 rounded-lg shadow-md">
-                                                <div className='text-xl'>
-                                                    RM{fuel_transaction.fuel_total_price}
-                                                </div>
-                                                <div className=''>
-                                                    {formatDateTime(fuel_transaction.transaction_date)}
-                                                </div>
-                                                <div className=''>
-                                                    {fuel_transaction.fuel_liter} Liter
-                                                </div>
-                                            </div>   
-                                        )}</>  
-                                        )}
-                                    </div>
-                                ))}
+                                    {fuelTransactions.map((fuel_transaction) => ( 
+                                        <div key={fuel_transaction.id} >
+                                            {fuel_transaction.vehicle_usage_uuid === vehicle_usage.id && (   
+                                                <> 
+                                            {fuel_transaction.fuel_type === 'Diesel' && (
+                                                <div className="p-2 text-gray-900 border border-gray-900 bg-gray-500/20 rounded-lg shadow-md">
+                                                    <div className='text-xl'>
+                                                        RM{fuel_transaction.fuel_total_price}
+                                                    </div>
+                                                    <div className=''>
+                                                        {formatDateTime(fuel_transaction.transaction_date)}
+                                                    </div>
+                                                    <div className=''>
+                                                        {fuel_transaction.fuel_liter} Liter
+                                                    </div>
+                                                </div>   
+                                            )}
+                                            {fuel_transaction.fuel_type === 'Petrol' && (
+                                                <div className="p-2 text-gray-900 border border-yellow-300 bg-yellow-500/20 rounded-lg shadow-md">
+                                                    <div className='text-xl'>
+                                                        RM{fuel_transaction.fuel_total_price}
+                                                    </div>
+                                                    <div className=''>
+                                                        {formatDateTime(fuel_transaction.transaction_date)}
+                                                    </div>
+                                                    <div className=''>
+                                                        {fuel_transaction.fuel_liter} Liter
+                                                    </div>
+                                                </div>   
+                                            )}</>  
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 

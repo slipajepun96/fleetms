@@ -8,7 +8,7 @@ import SmallNavLink from '@/Components/SmallNavLink';
 import InputLabel from '@/Components/InputLabel';
 import FleetUsage from './FleetUsage';
 
-export default function ManagementLayout({ header, children, vehicles, vehicle_usages, statement_dates, previous_month_odometer }) {
+export default function ManagementLayout({ header, children, vehicles, vehicle_usages, statement_dates, previous_month_odometer, maintenances }) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -154,7 +154,8 @@ export default function ManagementLayout({ header, children, vehicles, vehicle_u
                         </div>
                         <div className='md:w-5/6'>
                             <main>{children}</main>
-                            <FleetUsage vehicle_usages={vehicle_usages} vehicle={vehicles} currentView={currentView} statement_dates={statement_dates} previous_month_odometer={previous_month_odometer}/>
+                            <FleetUsage vehicle_usages={vehicle_usages} vehicle={vehicles} currentView={currentView} statement_dates={statement_dates} 
+                            previous_month_odometer={previous_month_odometer} maintenances={maintenances}/>
                         </div>
                     </div>
                 </div>

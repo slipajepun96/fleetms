@@ -89,19 +89,19 @@ export default function ReportView({ header, children, vehicles, vehicle_usages,
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <div>
+                            <div className="grid">
                                 <table style={{ width: '50%' }}>
-                            <tr>
-                                <td style={{ width: '200px' }}>Vehicle Log</td>
-                                <td style={{ width: '10px' }}>:</td>
-                                <td className='uppercase px-1 py-1 text-sm font-semibold'>{vehicles.vehicle_manufacturer} {vehicles.vehicle_model} {vehicles.plateNum}</td>
-                            </tr>
-                            <tr>
-                                <td>Month</td>
-                                <td>:</td>
-                                <td className='uppercase px-1 py-1 text-sm font-semibold'>{selectedMonthYear}</td>
-                            </tr>
-                        </table>
+                                    <tr>
+                                        <td style={{ width: '200px' }} className='uppercase px-1 py-1 text-sm font-semibold'>Vehicle Log</td>
+                                        <td style={{ width: '10px' }}>:</td>
+                                        <td className='uppercase px-1 py-1 text-sm font-bold'>{vehicles.vehicle_manufacturer} {vehicles.vehicle_model} {vehicles.plateNum}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='uppercase px-1 py-1 text-sm font-semibold'>Month</td>
+                                        <td>:</td>
+                                        <td className='uppercase px-1 py-1 text-sm font-bold'>{selectedMonthYear}</td>
+                                    </tr>
+                                </table>
                                 <table className="w-full border-collapse border border-gray-400 mt-4">
                                     <thead>
                                         <tr >
@@ -126,7 +126,7 @@ export default function ReportView({ header, children, vehicles, vehicle_usages,
                                     <tbody>
                                         <tr>
                                             <td colSpan="3" className="border border-gray-900 text-center">b/f</td>
-                                            <td  className="border border-gray-900">{previous_month_odometer}</td>
+                                            <td  className="border border-gray-900 py-1 px-2 text-right">{previous_month_odometer}</td>
                                             <td colSpan="5" className="border border-gray-900"></td>
                                         </tr>
 
@@ -149,28 +149,33 @@ export default function ReportView({ header, children, vehicles, vehicle_usages,
                                             return(
                                             <tr key={vehicle_usage.id}>
                                                 
-                                                <td className="border border-gray-900">{formatDateTime(vehicle_usage.actual_start_datetime)}</td>
-                                                <td className="border border-gray-900">{formatDateTime(vehicle_usage.actual_end_datetime)}</td>
-                                                <td className="border border-gray-900">{vehicle_usage.destination}, {vehicle_usage.purpose}</td>
-                                                <td className="border border-gray-900">{vehicle_usage.end_odometer}</td>
-                                                <td className="border border-gray-900">{distanceTraveled}</td>
-                                                <td className="border border-gray-900">{fuelUsage.totalFuelLiter}</td>
-                                                <td className="border border-gray-900">RM{fuelUsage.totalFuelPrice}</td>
-                                                <td className="border border-gray-900">{vehicle_usage.notes_on_return}</td>
-                                                <td className="border border-gray-900">{getUsername(vehicle_usage.user_uuid)}</td>
+                                                <td className="border border-gray-900 py-1 px-2">{formatDateTime(vehicle_usage.actual_start_datetime)}</td>
+                                                <td className="border border-gray-900 py-1 px-2">{formatDateTime(vehicle_usage.actual_end_datetime)}</td>
+                                                <td className="border border-gray-900 py-1 px-2">{vehicle_usage.destination}, {vehicle_usage.purpose}</td>
+                                                <td className="border border-gray-900 py-1 px-2 text-right">{vehicle_usage.end_odometer}</td>
+                                                <td className="border border-gray-900 py-1 px-2 text-right">{distanceTraveled}</td>
+                                                <td className="border border-gray-900 py-1 px-2 text-right">{fuelUsage.totalFuelLiter}</td>
+                                                <td className="border border-gray-900 py-1 px-2 text-right">RM{fuelUsage.totalFuelPrice}</td>
+                                                <td className="border border-gray-900 py-1 px-2">{vehicle_usage.notes_on_return}</td>
+                                                <td className="border border-gray-900 py-1 px-2">{getUsername(vehicle_usage.user_uuid)}</td>
                                             </tr>
                                         )})}
 
                                         <tr>
-                                            <td colSpan="4" className="border border-gray-900 text-center">Total</td>
-                                            <td className="border border-gray-900">{totalDistanceTraveled}</td>
-                                            <td className="border border-gray-900">{totalLiter}</td>
-                                            <td className="border border-gray-900">RM{totalPrice}</td>
+                                            <td colSpan="4" className="font-bold border border-gray-900 text-center">Total</td>
+                                            <td className="border border-gray-900 py-1 px-2 text-right">{totalDistanceTraveled}</td>
+                                            <td className="border border-gray-900 py-1 px-2 text-right">{totalLiter}</td>
+                                            <td className="border border-gray-900 py-1 px-2 text-right">RM{totalPrice}</td>
                                             <td colSpan="3" className="border border-gray-900"></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <a href={route('reportPrintPdf', {vehicle_id: vehicles.id, selectedMonthYear: selectedMonthYear,})} target='_blank'>
+                                <PrimaryButton className="mt-2">
+                                        Print
+                                </PrimaryButton>
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import DataTable from '@/Components/DataTable';
 import PrimaryButton from '@/Components/PrimaryButton';
 import UserEditUser from './Partials/UserEditUser';
 import UserDeleteUser from './Partials/UserDeleteUser';
+import UserDisableUser from './Partials/UserDisableUser';
 import UserAuthorisedUser from './Partials/UserAuthorisedUser';
 
 export default function User({ users, user}) {
@@ -66,6 +67,7 @@ export default function User({ users, user}) {
                     <UserAuthorisedUser user={row}/>
                     <UserEditUser user={row}/>
                     <UserDeleteUser user={row}/>
+                    <UserDisableUser user={row}/>
                 </div>
             )
         },

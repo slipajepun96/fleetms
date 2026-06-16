@@ -16,8 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignUuid('vehicle_usage_uuid');
             $table->string('fuel_type');
-            $table->string('fuel_total_price');
-            $table->string('fuel_liter');
+            $table->integer('fuel_total_price');
+            $table->integer('fuel_liter');
             $table->string('transaction_date');
         });
     }

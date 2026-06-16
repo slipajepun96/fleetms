@@ -14,7 +14,10 @@ use App\Models\VehicleUsage;
 use App\Models\Vehicle;
 use App\Models\User;
 use App\Models\FuelTransaction;
+use App\Models\Maintenance;
 use Carbon\Carbon;
+use Spatie\LaravelPdf\Facades\Pdf;
+use function Spatie\LaravelPdf\Support\pdf;
 
 class ManagementController extends Controller
 {
@@ -32,6 +35,7 @@ class ManagementController extends Controller
                 'vehicles' => $vehicles,
                 'users' => $users,
                 'current_entity' => $currentEntity,
+                
             ]);
         }
         else {
@@ -72,19 +76,65 @@ class ManagementController extends Controller
             ->orderByDesc('year')
             ->orderByDesc('month')
             ->get();
-
+        $maintenances = Maintenance::all();
         return Inertia::render('Management/ManagementLayout', [
             'vehicles' => $vehicles,
             'vehicle_usages' => $vehicle_usages,
             'statement_dates' => $statement_dates,
+            'maintenances' => $maintenances,
         ]);
     }
 
     public function viewReport(Request $request): Response
     {
-        $vehicles = Vehicle::findOrFail($request->vehicle_id);
+        try{
+            // dd("test");
+            $vehicles = Vehicle::findOrFail($request->vehicle_id);
+            $date = Carbon::createFromFormat('F Y', $request->selectedMonthYear);
+            $vehicle_usages = VehicleUsage::where('vehicle_uuid', $request->vehicle_id)
+                ->where('application_status', 'finished')
+                ->whereMonth('actual_start_datetime', $date->month)
+                ->whereYear('actual_start_datetime', $date->year)
+                ->orderBy('actual_start_datetime', 'asc')
+                ->get();
+
+            if ($date->month === 1){$year = $date->year-1; $month = 12;} else {$year = $date->year; $month = $date->month-1;}
+
+            $latest_previous_month_vehicle_usage = VehicleUsage::where('vehicle_uuid', $request->vehicle_id)
+                ->where('application_status', 'finished')
+                ->whereMonth('actual_start_datetime', $month)
+                ->whereYear('actual_start_datetime', $year)
+                ->orderBy('actual_start_datetime', 'desc')
+                ->get();
+
+            $previous_month_odometer = $vehicles->initial_odometer;
+            if($latest_previous_month_vehicle_usage->isNotEmpty()){
+                $previous_month_odometer = $latest_previous_month_vehicle_usage[0]->end_odometer;
+            }
+            $users = User::all();
+            $fuelTransactions = FuelTransaction::whereIn('vehicle_usage_uuid', $vehicle_usages->pluck('id'))->get();
+            return Inertia::render('Management/ReportView', [
+                'vehicles' => $vehicles,
+                'vehicle_usages' => $vehicle_usages,
+                'users' => $users,
+                'fuelTransactions' => $fuelTransactions,
+                'selectedMonthYear' => $request->selectedMonthYear,
+                'previous_month_odometer' => $previous_month_odometer,
+            ]);
+        } catch(\Exception $e) {
+            return to_route('home');
+        }
+
+    }
+
+    public function reportPrintPdf(Request $request, $vehicle_id)
+    {
+        // dd($vehicle_id);
+        $vehicles = Vehicle::findOrFail($vehicle_id);
+        // $vehicles = Vehicle::findOrFail($vehicle_usages->vehicle_uuid);
+        // dd($selectedMonthYear);
         $date = Carbon::createFromFormat('F Y', $request->selectedMonthYear);
-        $vehicle_usages = VehicleUsage::where('vehicle_uuid', $request->vehicle_id)
+        $vehicle_usages = VehicleUsage::where('vehicle_uuid', $vehicle_id)
             ->where('application_status', 'finished')
             ->whereMonth('actual_start_datetime', $date->month)
             ->whereYear('actual_start_datetime', $date->year)
@@ -92,8 +142,7 @@ class ManagementController extends Controller
             ->get();
 
         if ($date->month === 1){$year = $date->year-1; $month = 12;} else {$year = $date->year; $month = $date->month-1;}
-
-        $latest_previous_month_vehicle_usage = VehicleUsage::where('vehicle_uuid', $request->vehicle_id)
+        $latest_previous_month_vehicle_usage = VehicleUsage::where('vehicle_uuid', $vehicle_id)
             ->where('application_status', 'finished')
             ->whereMonth('actual_start_datetime', $month)
             ->whereYear('actual_start_datetime', $year)
@@ -101,18 +150,32 @@ class ManagementController extends Controller
             ->get();
 
         $previous_month_odometer = $vehicles->initial_odometer;
-        if($latest_previous_month_vehicle_usage->isNotEmpty()){
+        if ($latest_previous_month_vehicle_usage->isNotEmpty()) {
             $previous_month_odometer = $latest_previous_month_vehicle_usage[0]->end_odometer;
         }
-        $users = User::all();
+
+        // $users = User::all();
+        $users = User::select('id', 'name')->get();
         $fuelTransactions = FuelTransaction::whereIn('vehicle_usage_uuid', $vehicle_usages->pluck('id'))->get();
-        return Inertia::render('Management/ReportView', [
-            'vehicles' => $vehicles,
+
+        
+        // return view('testpdf', [
+        //     'vehicle_usages' => $vehicle_usages, 
+        //     'vehicles' => $vehicles, 
+        //     'fuelTransactions' => $fuelTransactions,
+        //     'users' => $users,
+        //     'selectedMonthYear' => $request->selectedMonthYear,
+        //     'previous_month_odometer' => $previous_month_odometer,
+        // ]);
+
+        return pdf()->view('testpdf', [
             'vehicle_usages' => $vehicle_usages,
-            'users' => $users,
+            'vehicles' => $vehicles,
             'fuelTransactions' => $fuelTransactions,
+            'users' => $users,
             'selectedMonthYear' => $request->selectedMonthYear,
             'previous_month_odometer' => $previous_month_odometer,
-        ]);
-    }
+        ])
+        ->landscape()->download('report.pdf');
+    } 
 }

@@ -39,6 +39,7 @@ class User extends Authenticatable
         'designation',
         'is_admin',
         'is_approver',
+        'is_active',
     ];
 
     /**
