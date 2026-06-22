@@ -199,22 +199,23 @@ export default function ManagementIndex({events, vehicles, vehicle_usage, vehicl
                         <div className="p-2 font-bold">
                             My Fleet
                         </div>
-                        
-                            <div className="grid flex-1 grid-cols-2 gap-2 md:grid-cols-6 my-2">
-                                {vehicles.map((vehicle) => (
-                                    <Link href={route('fleetDetail', vehicle.id)}>
-                                    <div className="p-4 text-gray-900 border border-gray-300 rounded-lg shadow hover:shadow-lg hover:font-extrabold">
-                                        <div className='uppercase font-bold'>
-                                            {vehicle.plateNum}
-                                        </div>
-                                        <div className=''>
-                                            {vehicle.vehicle_manufacturer} {vehicle.vehicle_model}
+   
+                        <div className="grid flex-1 grid-cols-2 gap-2 md:grid-cols-6 my-2 ">
+                            {vehicles.map((vehicle) => (
+                                <Link href={route('fleetDetail', vehicle.id)}>
+                                    <div class="rounded-lg bg-gradient-to-bl from-gray-300 to-gray-500">
+                                        <div className="p-4 text-gray-900 border border-gray-300 rounded-lg shadow hover:shadow-lg hover:font-extrabold">
+                                            <div className='uppercase font-bold'>
+                                                {vehicle.plateNum}
+                                            </div>
+                                            <div className=''>
+                                                {vehicle.vehicle_manufacturer} {vehicle.vehicle_model}
+                                            </div>
                                         </div>
                                     </div>
-                                   </Link> 
-                                ))}                                     
-                            </div>
-                        
+                                </Link> 
+                            ))}                                     
+                        </div> 
                     </div>
                     {/* {entityVehicleUsage(vehicle_usages, vehicles, current_entity)} */}
                     <div className="p-2 md:p-2 text-gray-900 border-t-2 border-gray-700">

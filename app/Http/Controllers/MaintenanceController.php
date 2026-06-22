@@ -45,7 +45,7 @@ class MaintenanceController extends Controller
             'maintenance_date' => 'nullable|date',
             'workshop_name' => 'required|string|max:255',
             'summary' => 'required|string|max:255',
-            'attachment_address' => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
+            'attachment_address' => 'nullable|file|mimes:pdf|max:2048',
         ]);
         $maintenance = new Maintenance();
         $maintenance->vehicle_uuid = $validated['vehicle_uuid'];
@@ -73,7 +73,7 @@ class MaintenanceController extends Controller
             'maintenance_date' => 'nullable|date',
             'workshop_name' => 'required|string|max:255',
             'summary' => 'required|string|max:255',
-            'attachment_address' => 'nullable|file|mimes:pdf,png,jpg,jpeg|max:2048',
+            'attachment_address' => 'nullable|file|mimes:pdf|max:2048',
         ]);
         $maintenance = Maintenance::findOrFail($validated['id']);
         $maintenance->vehicle_uuid = $validated['vehicle_uuid'];

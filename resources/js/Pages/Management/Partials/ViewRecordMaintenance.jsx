@@ -113,15 +113,15 @@ export default function ViewRecordMaintenance({maintenance, title , attachment_a
                 </PrimaryButton>
             </DrawerTrigger>
             <DrawerContent className="overflow-hidden">
-                <div className="w-full max-w-xl mx-auto">
-                    <DrawerHeader>
+                    <DrawerHeader className="flex flex-col items-center">
                         <DrawerTitle>View Maintenance</DrawerTitle>
                     </DrawerHeader>
-                    <div className="p-4 pb-4">
+                <div className="w-full max-w-4xl mx-auto">    
+                    <div className="p-10 pb-10">
                         <form onSubmit={submit}>
-                            {/* <div className="grid items-center justify-center space-x-2"> */}
-                            {/* <div className="items-center space-y-2"> */}
-                                <div>
+                            {/* <div className="flex flex-col justify-items-center"> */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className=''>
                                     <InputLabel
                                         value={
                                             <>
@@ -132,7 +132,7 @@ export default function ViewRecordMaintenance({maintenance, title , attachment_a
                                     {formatDateTime(maintenance.maintenance_date)}
                                 </div>
 
-                                <div>
+                                <div className=''>
                                     <InputLabel
                                         value={
                                             <>
@@ -142,51 +142,48 @@ export default function ViewRecordMaintenance({maintenance, title , attachment_a
                                     />
                                     {maintenance.workshop_name}
                                 </div>
+                            </div>
 
-                                <div>
-                                    <InputLabel
-                                        value={
-                                            <>
-                                                Summary
-                                            </>
-                                        }
-                                    />
-                                    {maintenance.summary}
+                            <div className=''>
+                                <InputLabel
+                                    value={
+                                        <>
+                                            Summary
+                                        </>
+                                    }
+                                />
+                                {maintenance.summary}
+                            </div>
+                        
+                            <div>
+                                <InputLabel
+                                    value={
+                                        <>
+                                            Invoice
+                                        </>
+                                    }
+                                />
+                                <div className="mt-4 w-full h-[400px] overflow-hidden border border-slate-200 rounded">
+                                    {maintenance.attachment_address ? (
+                                        // isImage ? (
+                                        //     <img
+                                        //         src={route('maintenance.attachment', maintenance.id)}
+                                        //         alt="Maintenance attachment"
+                                        //         className="w-full h-full object-contain rounded"
+                                        //     />
+                                        // ):(
+                                        <iframe
+                                            src={route('maintenance.attachment', maintenance.id)}
+                                            title="Maintenance attachment"
+                                            className="w-full h-full rounded"
+                                            loading="lazy"
+                                        />
+                                        // )
+                                    ) : (
+                                        <p className="text-sm text-slate-500">No attachment available.</p>
+                                    )}
                                 </div>
-
-                                {/* not working yet */}
-                                <div>
-                                    <InputLabel
-                                        value={
-                                            <>
-                                                Invoice
-                                            </>
-                                        }
-                                    />
-                                    <div className="mt-4 w-full h-[400px] overflow-hidden border border-slate-200 rounded">
-                                        {maintenance.attachment_address ? (
-                                            isImage ? (
-                                                <img
-                                                    src={route('maintenance.attachment', maintenance.id)}
-                                                    alt="Maintenance attachment"
-                                                    className="w-full h-full object-contain rounded"
-                                                />
-                                            ):(
-                                            <iframe
-                                                src={route('maintenance.attachment', maintenance.id)}
-                                                title="Maintenance attachment"
-                                                className="w-full h-full rounded"
-                                                frameBorder="0"
-                                                loading="lazy"
-                                            />
-                                            )
-                                        ) : (
-                                            <p className="text-sm text-slate-500">No attachment available.</p>
-                                        )}
-                                    </div>
-                                </div>
-                            {/* </div> */}
-                            {/* </div> */}
+                            </div>
                         </form>
                         
                     </div>

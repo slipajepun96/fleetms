@@ -138,8 +138,10 @@ export default function ManagementLayout({ header, children, vehicles, vehicle_u
                                         />
                                         {vehicles.current_odometer}
                                     </div>
-
-                                    <div className='p-2 text-right text-sm font-bold'>Edit in Configuration!</div>
+                                    
+                                    <Link href={route('vehicle.index', vehicles.id)}>
+                                        <div className='p-2 text-right text-sm hover:font-bold'>Edit in Configuration!</div>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

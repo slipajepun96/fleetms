@@ -196,7 +196,7 @@ export default function RecordMaintenance({ vehicleUuid }) {
                                 <FileInput
                                     id="attachment_address"
                                     name="attachment_address"
-                                    accept=".pdf,.png,.jpg,.jpeg"
+                                    accept=".pdf"
                                     maxSize={2}
                                     showPreview={true}
                                     onChange={(e) =>
