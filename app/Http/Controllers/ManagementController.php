@@ -26,13 +26,13 @@ class ManagementController extends Controller
         $approverStatus = Auth::user()->is_approver;
         if ($approverStatus == '1'){
             $currentEntity = Auth::user()->entity;
-            $vehicles = Vehicle::where('is_active', 1)->where('owner_entity', '=', $currentEntity)->get();
+            // $vehicles = Vehicle::where('is_active', 1)->where('owner_entity', '=', $currentEntity)->get();
             $vehicleUsages = VehicleUsage::all();
             $users = User::all();
             return Inertia::render('Management/ManagementIndex', [
                 'approver_status' => $approverStatus,
                 'vehicle_usages' => $vehicleUsages,
-                'vehicles' => $vehicles,
+                // 'vehicles' => $vehicles,
                 'users' => $users,
                 'current_entity' => $currentEntity,
                 

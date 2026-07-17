@@ -7,11 +7,13 @@ use App\Http\Controllers\GoogleAuthController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Configuration\VehicleController;
+use App\Http\Controllers\Configuration\EntityController;
 use App\Http\Controllers\Configuration\UserController;
 use App\Http\Controllers\Configuration\ConfigurationController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\Configuration\ParameterController;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -34,8 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    //request car
-    Route::post('/home', [HomeController::class, 'requestVehicle'])->name('vehicle.request');
+    //home
+    Route::get('/add', [ParameterController::class, 'addForeignWorker'])->name('fworker.add');
+    Route::post('/home', [HomeController::class, 'saveFWorker'])->name('fworker.save');
+    Route::post('/home/passport', [HomeController::class, 'savePassportWorker'])->name('passport.save');
+    Route::post('/home/permit', [HomeController::class, 'savePermitWorker'])->name('permit.save');
+
     Route::post('/home/delete', [HomeController::class, 'deleteRequestedVehicle'])->name('vehicle.deleteRequested');
     Route::get('/home/approve/{id}', [HomeController::class, 'approveRequestVehicle'])->name('vehicle.approve');
     Route::get('/home/reject/{id}', [HomeController::class, 'rejectRequestVehicle'])->name('vehicle.reject');
@@ -45,11 +51,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/home/end-use', [HomeController::class, 'endUseVehicle'])->name('vehicle.endUse');
     Route::post('/home/fuel-use', [HomeController::class, 'saveFuelTransaction'])->name('vehicle.saveFuelTransaction');
 
-    //vehicle
-    Route::get('/car', [VehicleController::class, 'carIndex'])->name('vehicle.index');
-    Route::post('/car', [VehicleController::class, 'saveVehicle'])->name('vehicle.save');
-    Route::post('/car/edit', [VehicleController::class, 'editVehicle'])->name('vehicle.edit');
-    Route::post('/car/delete', [VehicleController::class, 'deleteVehicle'])->name('vehicle.delete');
+    //EntityController
+    Route::get('/entity', [EntityController::class, 'entityIndex'])->name('entity.index');
+    Route::post('/entity', [EntityController::class, 'saveEntity'])->name('entity.save');
+    Route::post('/entity/edit', [EntityController::class, 'editEntity'])->name('entity.edit');
+    Route::post('/entity/delete', [EntityController::class, 'deleteEntity'])->name('entity.delete');
 
     //user
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
@@ -57,6 +63,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/authorised', [UserController::class, 'changeAuthorisation'])->name('user.authorise');
     Route::post('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
     Route::post('/user/disable', [UserController::class, 'disableUser'])->name('user.disable');
+
+    //status parameter
+    Route::get('/status', [ParameterController::class, 'statusIndex'])->name('status.index');
+    Route::post('/status', [ParameterController::class, 'saveStatus'])->name('status.save');
+
+    //country parameter
+    Route::get('/country', [ParameterController::class, 'countryIndex'])->name('country.index');
+    Route::post('/country', [ParameterController::class, 'saveCountry'])->name('country.save');
 
     //configuration
     Route::get('/configuration', [ConfigurationController::class, 'configurationIndex'])->name('configuration.index');

@@ -31,7 +31,7 @@ import ViewEventDetails from '../Partials/ViewEventDetails';
 import ViewQRLinkShare from '../Partials/ViewQRLinkShare';
 import ViewAttendanceList from '../Partials/ViewAttendanceList';
 import DeleteEvent from '../Partials/DeleteEvent';
-import RequestVehicle from '../Partials/RequestVehicle';
+import RequestVehicle from '../AddForeignWorker';
 import ViewRequestVehicle from '../Partials/ViewRequestVehicle';
 import RequestApproval from '../Partials/RequestApproval';
 import StartUse from '../Partials/StartUse';
@@ -44,9 +44,9 @@ export default function ManagementIndex({events, vehicles, vehicle_usage, vehicl
     const { flash } = usePage().props;
     const [usage_data, setUsageData] = useState([]);
 
-    useEffect(() => {
-        entityVehicleUsage(vehicle_usages, vehicles, current_entity);
-    }, [vehicle_usages, vehicles, current_entity]);
+        // useEffect(() => {
+        //     entityVehicleUsage(vehicle_usages, vehicles, current_entity);
+        // }, [vehicle_usages, vehicles, current_entity]);
 
     const formatDateTime = (dateTimeString) => 
     {
@@ -60,25 +60,25 @@ export default function ManagementIndex({events, vehicles, vehicle_usage, vehicl
         return `${day} ${month} ${year}`;
     };
 
-    function entityVehicleUsage(vehicle_usages, vehicles, current_entity, usage_data){
-        // ambil semua vehicle utk entity semasa
-        const entityVehicles = vehicles.filter(
-            vehicle => vehicle.owner_entity === current_entity
-        );
+    // function entityVehicleUsage(vehicle_usages, vehicles, current_entity, usage_data){
+    //     // ambil semua vehicle utk entity semasa
+    //     const entityVehicles = vehicles.filter(
+    //         vehicle => vehicle.owner_entity === current_entity
+    //     );
 
-        // ambil semua uuid vehicle
-        const vehicleUuids = entityVehicles.map(
-            vehicle => vehicle.id
-        );
+    //     // ambil semua uuid vehicle
+    //     const vehicleUuids = entityVehicles.map(
+    //         vehicle => vehicle.id
+    //     );
 
-        // filter usage ikut vehicle uuid
-        const entity_vehicle_usage = vehicle_usages.filter(
-            usage => vehicleUuids.includes(usage.vehicle_uuid)
-        );
-        console.log(entity_vehicle_usage);
-        setUsageData(entity_vehicle_usage);
+    //     // filter usage ikut vehicle uuid
+    //     const entity_vehicle_usage = vehicle_usages.filter(
+    //         usage => vehicleUuids.includes(usage.vehicle_uuid)
+    //     );
+    //     console.log(entity_vehicle_usage);
+    //     setUsageData(entity_vehicle_usage);
         
-    }
+    // }
 
     const displayEventForm = (type) => {
         // reset();
@@ -188,7 +188,7 @@ export default function ManagementIndex({events, vehicles, vehicle_usage, vehicl
         }
     ]
 
-    console.log(vehicle_usages);
+    // console.log(vehicle_usages);
 
     return (
         <AuthenticatedLayout>
@@ -201,7 +201,7 @@ export default function ManagementIndex({events, vehicles, vehicle_usage, vehicl
                         </div>
    
                         <div className="grid flex-1 grid-cols-2 gap-2 md:grid-cols-6 my-2 ">
-                            {vehicles.map((vehicle) => (
+                            {/* {vehicles.map((vehicle) => (
                                 <Link href={route('fleetDetail', vehicle.id)}>
                                     <div class="rounded-lg bg-gradient-to-bl from-gray-300 to-gray-500">
                                         <div className="p-4 text-gray-900 border border-gray-300 rounded-lg shadow hover:shadow-lg hover:font-extrabold">
@@ -214,7 +214,7 @@ export default function ManagementIndex({events, vehicles, vehicle_usage, vehicl
                                         </div>
                                     </div>
                                 </Link> 
-                            ))}                                     
+                            ))}                                      */}
                         </div> 
                     </div>
                     {/* {entityVehicleUsage(vehicle_usages, vehicles, current_entity)} */}
@@ -226,7 +226,7 @@ export default function ManagementIndex({events, vehicles, vehicle_usage, vehicl
                             <div className="md:mx-auto md:max-w-7xl lg:px-8">
                                 <div className="m-2 p-4 text-gray-900 border border-gray-300 rounded-lg shadow"> 
                                     <div className="text-gray-900">                                        
-                                        <DataTable columns={columns} data={usage_data} className='mt-4'/>
+                                        {/* <DataTable columns={columns} data={usage_data} className='mt-4'/> */}
                                     </div>
                                 </div>
                             </div>

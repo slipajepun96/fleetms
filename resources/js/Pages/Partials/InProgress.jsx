@@ -29,8 +29,8 @@ import DeleteRequestVehicle from './DeleteRequestVehicle';
 import { useMediaQuery } from '@custom-react-hooks/use-media-query';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose, DrawerTrigger, } from "@/components/ui/drawer"
 import { ArrowRight, ArrowDown } from 'lucide-react';
-import EndUse from './EndUse';
-import FuelTransaction from './FuelTransaction';
+import EndUse from './AddPassport';
+import FuelTransaction from './EditWorker';
 
 export default function InProgress({vehicle_usage, vehicles, users, vehicle_usages, fuelTransactions}) {
     
