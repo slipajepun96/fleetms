@@ -113,7 +113,7 @@ export default function StartUse({vehicles, vehicle, vehicle_usages, requests_ap
             <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
                 <DialogTrigger asChild>
                     <div className="grid flex-1 gap-2 my-2">
-                        <div className="p-4 h-32 text-gray-900 border border-gray-300 rounded-lg shadow hover:shadow-lg hover:font-extrabold">
+                        <div className="p-4 h-32 text-gray-900 border border-gray-300 bg-gradient-to-bl from-green-200 to-yellow-200 rounded-lg shadow hover:shadow-lg hover:font-extrabold">
                             <div className=''>
                                 Start Use                           
                             </div>

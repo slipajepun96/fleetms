@@ -20,7 +20,7 @@ export default function ConfigurationIndex({}) {
 
             <div className="py-2">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="p-4 text-gray-900 border border-gray-300 rounded-lg shadow">
+                    <div className="p-4 text-gray-900 border border-gray-300 bg-gradient-to-bl from-blue-300 to-yellow-400 rounded-lg shadow">
                         <div className="p-6 flex flex-col md:flex-row text-gray-900">
                             <div className='hidden md:block'><ArrowLeft /></div>
                             <div className='block md:hidden'><ArrowUp /></div>
